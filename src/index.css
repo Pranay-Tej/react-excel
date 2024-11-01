@@ -1,0 +1,68 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body{
+  margin: 2rem;
+}
+
+button{
+  cursor: pointer;
+  margin: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: hsl(234, 50%, 50%);
+  color: white;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+button:disabled{
+  cursor: not-allowed;
+  background-color: hsl(234, 50%, 50%, 0.5);
+}
+
+body {
+  font-family: sans-serif;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 2px solid rgb(140 140 140);
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+thead {
+  background-color: rgb(228 240 245);
+}
+
+th,
+td {
+  border: 1px solid rgb(160 160 160);
+  padding: 8px 10px;
+}
+
+td {
+  background-color: hsl(0, 0%, 96%);
+}
+
+td:has(input) {
+  padding: 0;
+  background-color: white;
+}
+
+input {
+  border: 0;
+}
+
+input:focus-within {
+  outline: none;
+}
+
+td:has(input.error) {
+  border-color: red;
+  outline-color: red;
+}
