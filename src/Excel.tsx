@@ -1,5 +1,6 @@
 import { useExcelContext } from "./excelContext";
 import { format } from "date-fns";
+import { isInvalidAmount, isInvalidNotes } from "./util";
 
 function Excel() {
   const {
@@ -41,7 +42,7 @@ function Excel() {
                   onChange={(e) =>
                     handleValueChange({ amount: Number(e.target.value) }, d.id)
                   }
-                  className={d.amount <= 0 ? "error" : ""}
+                  className={isInvalidAmount(d.amount) ? "error" : ""}
                 />
               </td>
               <td>
@@ -51,7 +52,7 @@ function Excel() {
                   onChange={(e) =>
                     handleValueChange({ notes: e.target.value }, d.id)
                   }
-                  className={d.notes === "" ? "error" : ""}
+                  className={isInvalidNotes(d.notes) ? "error" : ""}
                 />
               </td>
               <td>

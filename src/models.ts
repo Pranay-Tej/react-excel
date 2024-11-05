@@ -6,3 +6,10 @@ export type Order = {
   notes: string;
   date: Date;
 };
+
+export type ApiPayloadOrder = {
+  id?: Uuid;
+  amount: number;
+  notes: string;
+  date: Date;
+};
