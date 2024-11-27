@@ -9,7 +9,8 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
   const [apiData, setApiData] = useState<Order[]>(initialData);
   const [data, setData] = useState<Order[]>([]);
 
-  const updatedOrdersIdset = useRef<Set<Uuid>>(new Set());
+  const updatedOrdersIdSet = useRef<Set<Uuid>>(new Set());
+  const deletedOrdersIdSet = useRef<Set<Uuid>>(new Set());
 
   useEffect(() => {
     setData(apiData);
@@ -25,11 +26,11 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
     setData((oldData) =>
       oldData.map((d) => (d.id === id ? { ...d, ...updatedValues } : d))
     );
-    updatedOrdersIdset.current.add(id);
+    updatedOrdersIdSet.current.add(id);
   };
 
   const addNewRow = () => {
-    const newId = `${NEW_ORDER_PREFIX}-${uuidv4()}`;
+    const newId = `${NEW_ORDER_PREFIX}${uuidv4()}`;
     setData((oldData) => [
       ...oldData,
       {
@@ -43,7 +44,7 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
 
   const handleCancel = () => {
     setData(apiData);
-    updatedOrdersIdset.current.clear();
+    updatedOrdersIdSet.current.clear();
   };
 
   const handleSave = () => {
@@ -53,7 +54,7 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
 
     const updatedOrders = data.filter(
       (d) =>
-        updatedOrdersIdset.current.has(d.id) &&
+        updatedOrdersIdSet.current.has(d.id) &&
         d.id.includes(NEW_ORDER_PREFIX) === false
     );
     const newOrders: ApiPayloadOrder[] = data
@@ -72,9 +73,19 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
     }));
     setApiData(newData);
 
-    updatedOrdersIdset.current.clear();
     console.log(payload);
+    console.log(deletedOrdersIdSet.current);
+
+    updatedOrdersIdSet.current.clear();
+    deletedOrdersIdSet.current.clear();
   };
+
+  const deleteRow = (id: Uuid) => {
+    setData((oldData) => oldData.filter((d) => d.id !== id));
+    if(!id.includes(NEW_ORDER_PREFIX)){
+      deletedOrdersIdSet.current.add(id);
+    }
+  }
 
   return (
     <ExcelContext.Provider
@@ -85,6 +96,7 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
         addNewRow,
         handleCancel,
         handleSave,
+        deleteRow
       }}
     >
       {props.children}

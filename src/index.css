@@ -8,7 +8,7 @@ body{
   margin: 2rem;
 }
 
-button{
+button.btn{
   cursor: pointer;
   margin: 1rem;
   padding: 0.5rem 1rem;
@@ -19,11 +19,14 @@ button{
   font-weight: 500;
 }
 
-button:disabled{
+button.btn:disabled{
   cursor: not-allowed;
   background-color: hsl(234, 50%, 50%, 0.5);
 }
 
+button.delete-btn{
+  border: none;
+}
 body {
   font-family: sans-serif;
 }
@@ -56,6 +59,7 @@ td:has(input) {
 
 input {
   border: 0;
+  background-color: transparent;
 }
 
 input:focus-within {
@@ -65,4 +69,8 @@ input:focus-within {
 td:has(input.error) {
   border-color: red;
   outline-color: red;
+}
+
+tr.new td{
+  background-color: hsl(240, 20%, 90%);
 }

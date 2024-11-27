@@ -11,6 +11,7 @@ type Context = {
   addNewRow: () => void;
   handleCancel: () => void;
   handleSave: () => void;
+  deleteRow: (id: Uuid) => void;
 };
 
 const ExcelContext = createContext<Context>({
@@ -20,6 +21,7 @@ const ExcelContext = createContext<Context>({
   addNewRow: () => {},
   handleCancel: () => {},
   handleSave: () => {},
+  deleteRow: () => {}
 });
 
 

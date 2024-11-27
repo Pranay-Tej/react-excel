@@ -1,6 +1,7 @@
 import { useExcelContext } from "./excelContext";
 import { format } from "date-fns";
 import { isInvalidAmount, isInvalidNotes } from "./util";
+import { NEW_ORDER_PREFIX } from "./constants";
 
 function Excel() {
   const {
@@ -10,14 +11,15 @@ function Excel() {
     addNewRow,
     handleCancel,
     handleSave,
+    deleteRow
   } = useExcelContext();
 
   return (
     <div>
       <h1>Excel</h1>
 
-      <button onClick={handleCancel}>Cancel</button>
-      <button onClick={handleSave} disabled={isInvalid}>
+      <button className="btn" onClick={handleCancel}>Cancel</button>
+      <button className="btn" onClick={handleSave} disabled={isInvalid}>
         Save
       </button>
 
@@ -33,7 +35,7 @@ function Excel() {
         </thead>
         <tbody>
           {data.map((d) => (
-            <tr key={d.id}>
+            <tr key={d.id} className={d.id.includes(NEW_ORDER_PREFIX) ? 'new' : ''}>
               <td>{d.id}</td>
               <td>
                 <input
@@ -64,12 +66,15 @@ function Excel() {
                   }
                 />
               </td>
+              <td>
+                <button className="delete-btn" onClick={() => deleteRow(d.id)}>❎</button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <button onClick={addNewRow}>Add New</button>
+      <button className="btn" onClick={addNewRow}>Add New</button>
     </div>
   );
 }
