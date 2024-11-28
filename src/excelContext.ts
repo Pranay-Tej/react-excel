@@ -7,6 +7,7 @@ import type { Order, Uuid } from "./models";
 type Context = {
   data: Order[];
   isInvalid: boolean;
+  updatedOrdersIdsSet: Set<Uuid>;
   handleValueChange: (updatedValues: Partial<Order>, id: Uuid) => void;
   addNewRow: () => void;
   handleCancel: () => void;
@@ -18,6 +19,7 @@ type Context = {
 const ExcelContext = createContext<Context>({
   data: [],
   isInvalid: false,
+  updatedOrdersIdsSet: new Set(),
   handleValueChange: () => {},
   addNewRow: () => {},
   handleCancel: () => {},

@@ -6,11 +6,13 @@ import SerialNumField from "./SerilaNumField";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useState } from "react";
 import type { OrderType } from "./models";
+import clsx from "clsx";
 
 function Excel() {
   const {
     data,
     isInvalid,
+    updatedOrdersIdsSet,
     handleValueChange,
     addNewRow,
     handleCancel,
@@ -62,7 +64,10 @@ function Excel() {
             // <tr key={d.id} className={d.id.includes(NEW_ORDER_PREFIX) ? 'new' : ''}>
             <tr
               key={`${d.id}-${idx}`}
-              className={d.id.includes(NEW_ORDER_PREFIX) ? "new" : ""}
+              className={clsx({
+                new: d.id.includes(NEW_ORDER_PREFIX),
+                edited: updatedOrdersIdsSet.has(d.id),
+              })}
             >
               <td>
                 <SerialNumField currentIndex={idx} />
@@ -89,13 +94,15 @@ function Excel() {
                   onChange={(e) =>
                     handleValueChange({ amount: Number(e.target.value) }, d.id)
                   }
-                  className={isInvalidAmount(d.amount) ? "error" : ""}
+                  className={clsx({
+                    error: isInvalidAmount(d.amount),
+                  })}
                 />
               </td>
               <td>
                 <input
                   type="text"
-                  value={d.notes ?? ''}
+                  value={d.notes ?? ""}
                   onChange={(e) =>
                     handleValueChange({ notes: e.target.value }, d.id)
                   }

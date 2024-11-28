@@ -9,8 +9,12 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
   const [apiData, setApiData] = useState<Order[]>(initialData);
   const [data, setData] = useState<Order[]>([]);
 
-  const updatedOrdersIdSet = useRef<Set<Uuid>>(new Set());
+  const [updatedOrdersIds, setUpdatedOrdersIds] = useState<Uuid[]>([]);
   const deletedOrdersIdSet = useRef<Set<Uuid>>(new Set());
+
+  const updatedOrdersIdsSet = useMemo<Set<Uuid>>(() => {
+    return new Set(updatedOrdersIds);
+  }, [updatedOrdersIds]);
 
   useEffect(() => {
     setData(apiData);
@@ -24,8 +28,8 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
     setData((oldData) =>
       oldData.map((d) => (d.id === id ? { ...d, ...updatedValues } : d))
     );
-    if (!id.includes(NEW_ORDER_PREFIX)) {
-      updatedOrdersIdSet.current.add(id);
+    if (!id.includes(NEW_ORDER_PREFIX) && !updatedOrdersIdsSet.has(id)) {
+      setUpdatedOrdersIds((curr) => [...curr, id]);
     }
   };
 
@@ -45,7 +49,8 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
 
   const handleCancel = () => {
     setData(apiData);
-    updatedOrdersIdSet.current.clear();
+    setUpdatedOrdersIds([]);
+    deletedOrdersIdSet.current.clear();
   };
 
   const handleSave = () => {
@@ -53,9 +58,7 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
       return;
     }
 
-    const updatedOrders = data.filter((d) =>
-      updatedOrdersIdSet.current.has(d.id)
-    );
+    const updatedOrders = data.filter((d) => updatedOrdersIdsSet.has(d.id));
     const newOrders: ApiPayloadOrder[] = data
       .filter((d) => d.id.includes(NEW_ORDER_PREFIX))
       .map((d) => {
@@ -75,7 +78,7 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
     console.log(payload);
     console.log(deletedOrdersIdSet.current);
 
-    updatedOrdersIdSet.current.clear();
+    setUpdatedOrdersIds([]);
     deletedOrdersIdSet.current.clear();
   };
 
@@ -100,6 +103,7 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
       value={{
         data,
         isInvalid,
+        updatedOrdersIdsSet,
         handleValueChange,
         addNewRow,
         handleCancel,

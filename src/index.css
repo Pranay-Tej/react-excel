@@ -82,5 +82,9 @@ td:has(input.error) {
 }
 
 tr.new td{
-  background-color: hsl(240, 20%, 90%);
+  background-color: hsl(132, 30%, 90%);
+}
+
+tr.edited td{
+  background-color: hsl(240, 30%, 90%);
 }
