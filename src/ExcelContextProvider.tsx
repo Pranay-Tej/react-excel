@@ -26,7 +26,9 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
     setData((oldData) =>
       oldData.map((d) => (d.id === id ? { ...d, ...updatedValues } : d))
     );
-    updatedOrdersIdSet.current.add(id);
+    if (!id.includes(NEW_ORDER_PREFIX)) {
+      updatedOrdersIdSet.current.add(id);
+    }
   };
 
   const addNewRow = () => {
@@ -54,8 +56,7 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
 
     const updatedOrders = data.filter(
       (d) =>
-        updatedOrdersIdSet.current.has(d.id) &&
-        d.id.includes(NEW_ORDER_PREFIX) === false
+        updatedOrdersIdSet.current.has(d.id)
     );
     const newOrders: ApiPayloadOrder[] = data
       .filter((d) => d.id.includes(NEW_ORDER_PREFIX))
@@ -82,9 +83,17 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
 
   const deleteRow = (id: Uuid) => {
     setData((oldData) => oldData.filter((d) => d.id !== id));
-    if(!id.includes(NEW_ORDER_PREFIX)){
+    if (!id.includes(NEW_ORDER_PREFIX)) {
       deletedOrdersIdSet.current.add(id);
     }
+  }
+
+  const swapRows = (idxOne: number, idxTwo: number) => {
+    const dataCopy = [...data];
+    const temp = dataCopy[idxOne];
+    dataCopy[idxOne] = dataCopy[idxTwo];
+    dataCopy[idxTwo] = temp;
+    setData(dataCopy);
   }
 
   return (
@@ -96,7 +105,8 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
         addNewRow,
         handleCancel,
         handleSave,
-        deleteRow
+        deleteRow,
+        swapRows
       }}
     >
       {props.children}

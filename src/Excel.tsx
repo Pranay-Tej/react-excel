@@ -2,6 +2,8 @@ import { useExcelContext } from "./excelContext";
 import { format } from "date-fns";
 import { isInvalidAmount, isInvalidNotes } from "./util";
 import { NEW_ORDER_PREFIX } from "./constants";
+import SerialNumField from "./SerilaNumField";
+// import { useAutoAnimate } from '@formkit/auto-animate/react'
 
 function Excel() {
   const {
@@ -13,6 +15,8 @@ function Excel() {
     handleSave,
     deleteRow
   } = useExcelContext();
+  // const [parent, enableAnimations] = useAutoAnimate(/* optional config */)
+
 
   return (
     <div>
@@ -27,15 +31,20 @@ function Excel() {
       <table>
         <thead>
           <tr>
+            <th>S No.</th>
             <th>id</th>
             <th>amount</th>
             <th>notes</th>
             <th>date</th>
+            <th></th>
           </tr>
         </thead>
+        {/* <tbody ref={parent}> */}
         <tbody>
-          {data.map((d) => (
-            <tr key={d.id} className={d.id.includes(NEW_ORDER_PREFIX) ? 'new' : ''}>
+          {data.map((d, idx) => (
+            // <tr key={d.id} className={d.id.includes(NEW_ORDER_PREFIX) ? 'new' : ''}>
+            <tr key={`${d.id}-${idx}`} className={d.id.includes(NEW_ORDER_PREFIX) ? 'new' : ''}>
+              <td><SerialNumField currentIndex={idx} /></td>
               <td>{d.id}</td>
               <td>
                 <input

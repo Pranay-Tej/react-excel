@@ -12,6 +12,7 @@ type Context = {
   handleCancel: () => void;
   handleSave: () => void;
   deleteRow: (id: Uuid) => void;
+  swapRows: (idxOne: number, id2: number) => void;
 };
 
 const ExcelContext = createContext<Context>({
@@ -21,7 +22,8 @@ const ExcelContext = createContext<Context>({
   addNewRow: () => {},
   handleCancel: () => {},
   handleSave: () => {},
-  deleteRow: () => {}
+  deleteRow: () => {},
+  swapRows: () => {},
 });
 
 
