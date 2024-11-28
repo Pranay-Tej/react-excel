@@ -2,7 +2,7 @@ import {
   createContext,
   useContext
 } from "react";
-import { Order, Uuid } from "./models";
+import type { Order, Uuid } from "./models";
 
 type Context = {
   data: Order[];

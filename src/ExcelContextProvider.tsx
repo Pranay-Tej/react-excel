@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { ExcelContext } from "./excelContext";
-import { ApiPayloadOrder, Order, Uuid } from "./models";
+import type { ApiPayloadOrder, Order, Uuid } from "./models";
 import { NEW_ORDER_PREFIX, initialData } from "./constants";
-import { isInvalidAmount, isInvalidNotes } from "./util";
+import { isInvalidAmount } from "./util";
 
 const ExcelContextProvider = (props: { children: React.ReactNode }) => {
   const [apiData, setApiData] = useState<Order[]>(initialData);
@@ -17,9 +17,7 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
   }, [apiData]);
 
   const isInvalid = useMemo(() => {
-    return data.some(
-      (d) => isInvalidAmount(d.amount) || isInvalidNotes(d.notes)
-    );
+    return data.some((d) => isInvalidAmount(d.amount));
   }, [data]);
 
   const handleValueChange = (updatedValues: Partial<Order>, id: Uuid) => {
@@ -40,6 +38,7 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
         amount: 100,
         notes: `Order notes`,
         date: new Date(),
+        type: "buy",
       },
     ]);
   };
@@ -60,8 +59,8 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
     const newOrders: ApiPayloadOrder[] = data
       .filter((d) => d.id.includes(NEW_ORDER_PREFIX))
       .map((d) => {
-        const { amount, date, notes } = d;
-        return { amount, date, notes };
+        const { amount, date, notes, type } = d;
+        return { amount, date, notes, type };
       });
 
     const payload: ApiPayloadOrder[] = [...updatedOrders, ...newOrders];

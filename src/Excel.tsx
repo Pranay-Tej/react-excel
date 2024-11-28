@@ -1,10 +1,11 @@
 import { useExcelContext } from "./excelContext";
 import { format } from "date-fns";
-import { isInvalidAmount, isInvalidNotes } from "./util";
+import { isInvalidAmount } from "./util";
 import { NEW_ORDER_PREFIX } from "./constants";
 import SerialNumField from "./SerilaNumField";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useState } from "react";
+import type { OrderType } from "./models";
 
 function Excel() {
   const {
@@ -49,9 +50,10 @@ function Excel() {
           <tr>
             <th>S No.</th>
             <th>id</th>
-            <th>amount</th>
-            <th>notes</th>
-            <th>date</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Notes(Optional)</th>
+            <th>Date</th>
             <th></th>
           </tr>
         </thead>
@@ -67,6 +69,20 @@ function Excel() {
               </td>
               <td>{d.id}</td>
               <td>
+                <select
+                  value={d.type}
+                  onChange={(e) =>
+                    handleValueChange(
+                      { type: e.target.value as OrderType },
+                      d.id
+                    )
+                  }
+                >
+                  <option value="buy">Buy</option>
+                  <option value="sell">Sell</option>
+                </select>
+              </td>
+              <td>
                 <input
                   type="number"
                   value={d.amount}
@@ -79,11 +95,11 @@ function Excel() {
               <td>
                 <input
                   type="text"
-                  value={d.notes}
+                  value={d.notes ?? ''}
                   onChange={(e) =>
                     handleValueChange({ notes: e.target.value }, d.id)
                   }
-                  className={isInvalidNotes(d.notes) ? "error" : ""}
+                  // className={isInvalidNotes(d.notes) ? "error" : ""}
                 />
               </td>
               <td>
