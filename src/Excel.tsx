@@ -3,7 +3,8 @@ import { format } from "date-fns";
 import { isInvalidAmount, isInvalidNotes } from "./util";
 import { NEW_ORDER_PREFIX } from "./constants";
 import SerialNumField from "./SerilaNumField";
-// import { useAutoAnimate } from '@formkit/auto-animate/react'
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { useState } from "react";
 
 function Excel() {
   const {
@@ -13,16 +14,31 @@ function Excel() {
     addNewRow,
     handleCancel,
     handleSave,
-    deleteRow
+    deleteRow,
   } = useExcelContext();
-  // const [parent, enableAnimations] = useAutoAnimate(/* optional config */)
-
+  const [isAnimationsEnabled, setIsAnimationsEnabled] = useState(true);
+  const [parent, enableAnimations] = useAutoAnimate(/* optional config */);
 
   return (
     <div>
       <h1>Excel</h1>
 
-      <button className="btn" onClick={handleCancel}>Cancel</button>
+      <div>
+        <button
+          className="btn"
+          onClick={() => {
+            enableAnimations(!isAnimationsEnabled);
+            setIsAnimationsEnabled((curr) => !curr);
+          }}
+        >
+          {isAnimationsEnabled ? "Disable Animations" : "Enable Animations"}
+        </button>
+      </div>
+      <hr />
+
+      <button className="btn" onClick={handleCancel}>
+        Cancel
+      </button>
       <button className="btn" onClick={handleSave} disabled={isInvalid}>
         Save
       </button>
@@ -39,12 +55,16 @@ function Excel() {
             <th></th>
           </tr>
         </thead>
-        {/* <tbody ref={parent}> */}
-        <tbody>
+        <tbody ref={parent}>
           {data.map((d, idx) => (
             // <tr key={d.id} className={d.id.includes(NEW_ORDER_PREFIX) ? 'new' : ''}>
-            <tr key={`${d.id}-${idx}`} className={d.id.includes(NEW_ORDER_PREFIX) ? 'new' : ''}>
-              <td><SerialNumField currentIndex={idx} /></td>
+            <tr
+              key={`${d.id}-${idx}`}
+              className={d.id.includes(NEW_ORDER_PREFIX) ? "new" : ""}
+            >
+              <td>
+                <SerialNumField currentIndex={idx} />
+              </td>
               <td>{d.id}</td>
               <td>
                 <input
@@ -76,14 +96,18 @@ function Excel() {
                 />
               </td>
               <td>
-                <button className="delete-btn" onClick={() => deleteRow(d.id)}>❎</button>
+                <button className="delete-btn" onClick={() => deleteRow(d.id)}>
+                  ❎
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <button className="btn" onClick={addNewRow}>Add New</button>
+      <button className="btn" onClick={addNewRow}>
+        Add New
+      </button>
     </div>
   );
 }

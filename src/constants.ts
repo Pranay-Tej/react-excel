@@ -43,6 +43,42 @@ export const initialData: Order[] = [
     notes: "buying",
     date: new Date("2024-04-01T08:49:00.000Z"),
   },
+  {
+    id: "i3j4k5l6-7m8n-9o0p-1q2r-3s4t5u6v7w8x",
+    amount: 500,
+    notes: "selling",
+    date: new Date("2024-03-01T08:50:00.000Z"),
+  },
+  {
+    id: "j5k6l7m8-9n0o-1p2q-3r4s-5t6u7v8w9x0y",
+    amount: 600,
+    notes: "buying",
+    date: new Date("2024-02-01T08:51:00.000Z"),
+  },
+  {
+    id: "k7l8m9n0-1o2p-3q4r-5s6t-7u8v-9w0x1y2z",
+    amount: 700,
+    notes: "selling",
+    date: new Date("2024-01-01T08:52:00.000Z"),
+  },
+  {
+    id: "l9m0n1o2-3p4q-5r6s-7t8u-9v0w-1x2y3z4a",
+    amount: 800,
+    notes: "buying",
+    date: new Date("2023-12-01T08:53:00.000Z"),
+  },
+  {
+    id: "m1n2o3p4-5q6r-7s8t-9u0v-1w2x-3y4z5a6b",
+    amount: 900,
+    notes: "selling",
+    date: new Date("2023-11-01T08:54:00.000Z"),
+  },
+  {
+    id: "n3o4p5q6-7r8s-9t0u-1v2w-3x4y-5z6a7b8c",
+    amount: 1000,
+    notes: "buying",
+    date: new Date("2023-10-01T08:55:00.000Z"),
+  },
 ];
 
 export const NEW_ORDER_PREFIX = "new-order-";
