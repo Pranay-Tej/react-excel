@@ -11,8 +11,7 @@ export type Order = {
 };
 
 export type ApiPayloadOrder = {
-  id?: Uuid;
-  draftId?: Uuid;
+  id: Uuid;
   type: OrderType;
   amount: number;
   notes?: string;
@@ -20,7 +19,8 @@ export type ApiPayloadOrder = {
 };
 
 export type ApiPayload = {
-  orders: ApiPayloadOrder[];
-  deletedOrderIds: Uuid[];
-  sequence: Uuid[];
+  new_orders: ApiPayloadOrder[];
+  modified_orders: ApiPayloadOrder[];
+  deleted_orders: Uuid[];
+  updated_arrangement?: Uuid[];
 }

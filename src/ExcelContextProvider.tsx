@@ -11,6 +11,7 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
 
   const [updatedOrdersIds, setUpdatedOrdersIds] = useState<Uuid[]>([]);
   const deletedOrdersIdSet = useRef<Set<Uuid>>(new Set());
+  const isReOrdered = useRef(false);
 
   const updatedOrdersIdsSet = useMemo<Set<Uuid>>(() => {
     return new Set(updatedOrdersIds);
@@ -45,12 +46,14 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
         type: "buy",
       },
     ]);
+    isReOrdered.current = true;
   };
 
   const handleCancel = () => {
     setData(apiData);
     setUpdatedOrdersIds([]);
     deletedOrdersIdSet.current.clear();
+    isReOrdered.current = false;
   };
 
   const handleSave = () => {
@@ -63,14 +66,14 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
       .filter((d) => d.id.includes(NEW_ORDER_PREFIX))
       .map((d) => {
         const { amount, date, notes, type } = d;
-        return { amount, date, notes, type, draftId: d.id.replace(NEW_ORDER_PREFIX, "") };
+        return { amount, date, notes, type, id: d.id.replace(NEW_ORDER_PREFIX, "") };
       });
 
-    const payloadOrders: ApiPayloadOrder[] = [...updatedOrders, ...newOrders];
     const payload: ApiPayload = {
-      orders: payloadOrders,
-      deletedOrderIds: Array.from(deletedOrdersIdSet.current),
-      sequence: data.map((d) => d.id.includes(NEW_ORDER_PREFIX) ? d.id.replace(NEW_ORDER_PREFIX, "") : d.id)
+      new_orders: newOrders,
+      modified_orders: updatedOrders,
+      deleted_orders: Array.from(deletedOrdersIdSet.current),
+      ...(isReOrdered.current && { updated_arrangement: data.map((d) => d.id.includes(NEW_ORDER_PREFIX) ? d.id.replace(NEW_ORDER_PREFIX, "") : d.id) })
     };
 
     // call api, get new data
@@ -81,10 +84,10 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
     setApiData(newData);
 
     console.log(payload);
-    console.log(deletedOrdersIdSet.current);
 
     setUpdatedOrdersIds([]);
     deletedOrdersIdSet.current.clear();
+    isReOrdered.current = false;
   };
 
   const deleteRow = (id: Uuid) => {
@@ -92,6 +95,7 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
     if (!id.includes(NEW_ORDER_PREFIX)) {
       deletedOrdersIdSet.current.add(id);
     }
+    isReOrdered.current = true;
   };
 
   const swapRows = (idxOne: number, idxTwo: number) => {
@@ -101,6 +105,7 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
       curr[idxTwo] = temp;
       return [...curr];
     });
+    isReOrdered.current = true;
   };
 
   return (
