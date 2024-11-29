@@ -4,9 +4,16 @@ import ExcelContextProvider from "./ExcelContextProvider";
 
 function App() {
   return (
-    <ExcelContextProvider>
-      <Excel />
-    </ExcelContextProvider>
+    <>
+      <h4>React Excel</h4>
+      <br />
+      <br />
+      <a href="https://github.com/Pranay-Tej/react-excel">GitHub Link</a>
+
+      <ExcelContextProvider>
+        <Excel />
+      </ExcelContextProvider>
+    </>
   );
 }
 

@@ -24,8 +24,6 @@ function Excel() {
 
   return (
     <div>
-      <h1>Excel</h1>
-
       <div>
         <button
           className="btn"
