@@ -18,7 +18,7 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
   }, [updatedOrdersIds]);
 
   useEffect(() => {
-    setData(apiData);
+    setData([...apiData]);
   }, [apiData]);
 
   const isInvalid = useMemo(() => {
@@ -50,7 +50,7 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
   };
 
   const handleCancel = () => {
-    setData(apiData);
+    setData([...apiData]);
     setUpdatedOrdersIds([]);
     deletedOrdersIdSet.current.clear();
     isReOrdered.current = false;
