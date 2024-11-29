@@ -29,7 +29,7 @@ export default function SerialNumField(props: Props) {
             newNumber = data.length;
         }
 
-        setValue(Number(e.target.value));
+        setValue(newNumber);
 
 
         debouncedSwapRows(props.currentIndex, newNumber - 1);

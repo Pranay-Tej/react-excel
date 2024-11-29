@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { ExcelContext } from "./excelContext";
-import type { ApiPayloadOrder, Order, Uuid } from "./models";
+import type { ApiPayload, ApiPayloadOrder, Order, Uuid } from "./models";
 import { NEW_ORDER_PREFIX, initialData } from "./constants";
 import { isInvalidAmount } from "./util";
 
@@ -63,10 +63,15 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
       .filter((d) => d.id.includes(NEW_ORDER_PREFIX))
       .map((d) => {
         const { amount, date, notes, type } = d;
-        return { amount, date, notes, type };
+        return { amount, date, notes, type, draftId: d.id.replace(NEW_ORDER_PREFIX, "") };
       });
 
-    const payload: ApiPayloadOrder[] = [...updatedOrders, ...newOrders];
+    const payloadOrders: ApiPayloadOrder[] = [...updatedOrders, ...newOrders];
+    const payload: ApiPayload = {
+      orders: payloadOrders,
+      deletedOrderIds: Array.from(deletedOrdersIdSet.current),
+      sequence: data.map((d) => d.id.includes(NEW_ORDER_PREFIX) ? d.id.replace(NEW_ORDER_PREFIX, "") : d.id)
+    };
 
     // call api, get new data
     const newData: Order[] = data.map((d) => ({

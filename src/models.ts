@@ -12,8 +12,15 @@ export type Order = {
 
 export type ApiPayloadOrder = {
   id?: Uuid;
+  draftId?: Uuid;
   type: OrderType;
   amount: number;
   notes?: string;
   date: Date;
 };
+
+export type ApiPayload = {
+  orders: ApiPayloadOrder[];
+  deletedOrderIds: Uuid[];
+  sequence: Uuid[];
+}
