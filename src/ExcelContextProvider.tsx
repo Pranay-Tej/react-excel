@@ -1,15 +1,22 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { ExcelContext } from "./excelContext";
-import type { ApiPayload, ApiPayloadOrder, Order, Uuid } from "./models";
+import type {
+  ApiPayload,
+  ApiPayloadOrder,
+  LocalOrder,
+  Order,
+  Uuid,
+} from "./models";
 import { NEW_ORDER_PREFIX, initialData } from "./constants";
 import { isInvalidAmount } from "./util";
 
 const ExcelContextProvider = (props: { children: React.ReactNode }) => {
   const [apiData, setApiData] = useState<Order[]>(initialData);
-  const [data, setData] = useState<Order[]>([]);
+  const [data, setData] = useState<LocalOrder[]>([]);
 
   const [updatedOrdersIds, setUpdatedOrdersIds] = useState<Uuid[]>([]);
+  const [hiddenOrderIds, setHiddenOrderIds] = useState<Uuid[]>([]);
   const deletedOrdersIdSet = useRef<Set<Uuid>>(new Set());
   const isReOrdered = useRef(false);
 
@@ -17,8 +24,18 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
     return new Set(updatedOrdersIds);
   }, [updatedOrdersIds]);
 
+  const hiddenOrdersIdSet = useMemo<Set<Uuid>>(() => {
+    return new Set(hiddenOrderIds);
+  }, [hiddenOrderIds]);
+
+  const formattedData = useMemo(() => {
+    return data
+      .filter(({ id }) => !hiddenOrdersIdSet.has(id))
+      .sort((a, b) => a.position - b.position);
+  }, [data, hiddenOrdersIdSet]);
+
   useEffect(() => {
-    setData([...apiData]);
+    setData(apiData.map((d, idx) => ({ ...d, position: idx + 1 })));
   }, [apiData]);
 
   const isInvalid = useMemo(() => {
@@ -44,13 +61,14 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
         notes: `Order notes`,
         date: new Date(),
         type: "buy",
+        position: oldData.length + 1,
       },
     ]);
     isReOrdered.current = true;
   };
 
   const handleCancel = () => {
-    setData([...apiData]);
+    setData(apiData.map((d, idx) => ({ ...d, position: idx + 1 })));
     setUpdatedOrdersIds([]);
     deletedOrdersIdSet.current.clear();
     isReOrdered.current = false;
@@ -66,14 +84,26 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
       .filter((d) => d.id.includes(NEW_ORDER_PREFIX))
       .map((d) => {
         const { amount, date, notes, type } = d;
-        return { amount, date, notes, type, id: d.id.replace(NEW_ORDER_PREFIX, "") };
+        return {
+          amount,
+          date,
+          notes,
+          type,
+          id: d.id.replace(NEW_ORDER_PREFIX, ""),
+        };
       });
 
     const payload: ApiPayload = {
       new_orders: newOrders,
       modified_orders: updatedOrders,
       deleted_orders: Array.from(deletedOrdersIdSet.current),
-      ...(isReOrdered.current && { updated_arrangement: data.map((d) => d.id.includes(NEW_ORDER_PREFIX) ? d.id.replace(NEW_ORDER_PREFIX, "") : d.id) })
+      ...(isReOrdered.current && {
+        updated_arrangement: data.map((d) =>
+          d.id.includes(NEW_ORDER_PREFIX)
+            ? d.id.replace(NEW_ORDER_PREFIX, "")
+            : d.id
+        ),
+      }),
     };
 
     // call api, get new data
@@ -90,6 +120,14 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
     isReOrdered.current = false;
   };
 
+  const hideRow = (id: Uuid) => {
+    setHiddenOrderIds((curr) => [...curr, id]);
+  };
+
+  const showAllRows = () => {
+    setHiddenOrderIds([]);
+  }
+
   const deleteRow = (id: Uuid) => {
     setData((oldData) => oldData.filter((d) => d.id !== id));
     if (!id.includes(NEW_ORDER_PREFIX)) {
@@ -98,11 +136,13 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
     isReOrdered.current = true;
   };
 
-  const swapRows = (idxOne: number, idxTwo: number) => {
+  const swapRows = (currentPosition: number, newPosition: number) => {
     setData((curr) => {
-      const temp = curr[idxOne];
-      curr[idxOne] = curr[idxTwo];
-      curr[idxTwo] = temp;
+      const temp = curr[currentPosition - 1];
+      curr[currentPosition - 1] = curr[newPosition - 1];
+      curr[currentPosition - 1].position = currentPosition;
+      curr[newPosition - 1] = temp;
+      curr[newPosition - 1].position = newPosition;
       return [...curr];
     });
     isReOrdered.current = true;
@@ -112,12 +152,15 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
     <ExcelContext.Provider
       value={{
         data,
+        formattedData,
         isInvalid,
         updatedOrdersIdsSet,
         handleValueChange,
         addNewRow,
         handleCancel,
         handleSave,
+        hideRow,
+        showAllRows,
         deleteRow,
         swapRows,
       }}

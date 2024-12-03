@@ -10,17 +10,21 @@ import clsx from "clsx";
 
 function Excel() {
   const {
-    data,
+    formattedData,
     isInvalid,
     updatedOrdersIdsSet,
     handleValueChange,
     addNewRow,
     handleCancel,
     handleSave,
+    hideRow,
+    showAllRows,
     deleteRow,
   } = useExcelContext();
   const [isAnimationsEnabled, setIsAnimationsEnabled] = useState(true);
-  const [parent, enableAnimations] = useAutoAnimate(/* optional config */);
+  const [parent, enableAnimations] = useAutoAnimate({
+    duration: 600,
+  });
 
   return (
     <div>
@@ -45,30 +49,39 @@ function Excel() {
       </button>
 
       <hr />
+
+      <button className="btn" onClick={showAllRows} disabled={isInvalid}>
+        Show all orders
+      </button>
+
+      <hr />
       <table>
         <thead>
           <tr>
-            <th>S No.</th>
+            {/* <th>Sl no. (read)</th> */}
+            <th>Sl no.</th>
             <th>id</th>
             <th>Type</th>
-            <th>Amount</th>
-            <th>Notes(Optional)</th>
+            <th>Price</th>
+            {/* <th>Notes(Optional)</th> */}
             <th>Date</th>
+            <th></th>
             <th></th>
           </tr>
         </thead>
         <tbody ref={parent}>
-          {data.map((d, idx) => (
+          {formattedData.map((d) => (
             // <tr key={d.id} className={d.id.includes(NEW_ORDER_PREFIX) ? 'new' : ''}>
             <tr
-              key={`${d.id}-${idx}`}
+              key={d.id}
               className={clsx({
                 new: d.id.includes(NEW_ORDER_PREFIX),
                 edited: updatedOrdersIdsSet.has(d.id),
               })}
             >
+              {/* <td>{d.position}</td> */}
               <td>
-                <SerialNumField currentIndex={idx} />
+                <SerialNumField currentPosition={d.position} key={d.position} />
               </td>
               <td>{d.id}</td>
               <td>
@@ -97,7 +110,7 @@ function Excel() {
                   })}
                 />
               </td>
-              <td>
+              {/* <td>
                 <input
                   type="text"
                   value={d.notes ?? ""}
@@ -106,7 +119,7 @@ function Excel() {
                   }
                   // className={isInvalidNotes(d.notes) ? "error" : ""}
                 />
-              </td>
+              </td> */}
               <td>
                 <input
                   type="date"
@@ -117,7 +130,20 @@ function Excel() {
                 />
               </td>
               <td>
-                <button className="delete-btn" onClick={() => deleteRow(d.id)}>
+                <button
+                  className="delete-btn"
+                  onClick={() => hideRow(d.id)}
+                  title="hide row"
+                >
+                  👀
+                </button>
+              </td>
+              <td>
+                <button
+                  className="delete-btn"
+                  onClick={() => deleteRow(d.id)}
+                  title="delete"
+                >
                   ❎
                 </button>
               </td>

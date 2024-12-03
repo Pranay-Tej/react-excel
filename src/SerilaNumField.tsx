@@ -3,11 +3,11 @@ import { useExcelContext } from "./excelContext";
 import debounce from 'lodash/debounce';
 
 type Props = {
-    currentIndex: number;
+    currentPosition: number;
 }
 
 export default function SerialNumField(props: Props) {
-    const [value, setValue] = useState(props.currentIndex + 1);
+    const [value, setValue] = useState(props.currentPosition);
 
     const { data, swapRows } = useExcelContext()
 
@@ -19,7 +19,7 @@ export default function SerialNumField(props: Props) {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
-        let newNumber = Number(e.target.value);
+        let newNumber = Math.floor(Number(e.target.value));
 
         if (newNumber < 1) {
             newNumber = 1;
@@ -32,7 +32,7 @@ export default function SerialNumField(props: Props) {
         setValue(newNumber);
 
 
-        debouncedSwapRows(props.currentIndex, newNumber - 1);
+        debouncedSwapRows(props.currentPosition, newNumber);
         // swapRows(props.currentIndex, newNumber - 1);
     }
 

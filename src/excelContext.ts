@@ -2,10 +2,11 @@ import {
   createContext,
   useContext
 } from "react";
-import type { Order, Uuid } from "./models";
+import type { LocalOrder, Order, Uuid } from "./models";
 
 type Context = {
-  data: Order[];
+  data: LocalOrder[];
+  formattedData: LocalOrder[];
   isInvalid: boolean;
   updatedOrdersIdsSet: Set<Uuid>;
   handleValueChange: (updatedValues: Partial<Order>, id: Uuid) => void;
@@ -13,11 +14,14 @@ type Context = {
   handleCancel: () => void;
   handleSave: () => void;
   deleteRow: (id: Uuid) => void;
+  hideRow: (id: Uuid) => void;
+  showAllRows: () => void;
   swapRows: (idxOne: number, id2: number) => void;
 };
 
 const ExcelContext = createContext<Context>({
   data: [],
+  formattedData: [],
   isInvalid: false,
   updatedOrdersIdsSet: new Set(),
   handleValueChange: () => {},
@@ -25,6 +29,8 @@ const ExcelContext = createContext<Context>({
   handleCancel: () => {},
   handleSave: () => {},
   deleteRow: () => {},
+  hideRow: () => {},
+  showAllRows: () => {},
   swapRows: () => {},
 });
 
