@@ -15,6 +15,7 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
   const [apiData, setApiData] = useState<Order[]>(initialData);
   const [data, setData] = useState<LocalOrder[]>([]);
   const [page, setPage] = useState(1);
+  const [highlightedOrderId, setHighlightedOrderId] = useState<Uuid | null>(null);
 
   const [updatedOrdersIds, setUpdatedOrdersIds] = useState<Uuid[]>([]);
   const [hiddenOrderIds, setHiddenOrderIds] = useState<Uuid[]>([]);
@@ -39,6 +40,16 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
   useEffect(() => {
     setData(apiData.map((d, idx) => ({ ...d, position: idx + 1 })));
   }, [apiData]);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setHighlightedOrderId(null);
+    }, 3500)
+
+    return () => {
+      clearTimeout(timeoutId);
+    }
+  }, [highlightedOrderId]);
 
   const isInvalid = useMemo(() => {
     return data.some((d) => isInvalidAmount(d.amount));
@@ -149,6 +160,7 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
     });
 
     setPage(Math.ceil(newPosition / 10));
+    setHighlightedOrderId(data[newPosition - 1].id);
     isReOrdered.current = true;
   };
 
@@ -168,7 +180,8 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
         deleteRow,
         swapRows,
         page,
-        setPage
+        setPage,
+        highlightedOrderId
       }}
     >
       {props.children}

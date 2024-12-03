@@ -13,7 +13,7 @@ export default function SerialNumField(props: Props) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const debouncedSwapRows = useCallback(
-        debounce(swapRows, 600),
+        debounce(swapRows, 400),
         [],
       );
 

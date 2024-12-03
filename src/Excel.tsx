@@ -21,6 +21,7 @@ function Excel() {
     hideRow,
     showAllRows,
     deleteRow,
+    highlightedOrderId,
   } = useExcelContext();
   const [isAnimationsEnabled, setIsAnimationsEnabled] = useState(true);
   const [parent, enableAnimations] = useAutoAnimate({
@@ -78,6 +79,7 @@ function Excel() {
               className={clsx({
                 new: d.id.includes(NEW_ORDER_PREFIX),
                 edited: updatedOrdersIdsSet.has(d.id),
+                highlighted: d.id === highlightedOrderId,
               })}
             >
               {/* <td>{d.position}</td> */}

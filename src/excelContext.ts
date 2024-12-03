@@ -1,7 +1,4 @@
-import {
-  createContext,
-  useContext
-} from "react";
+import { createContext, useContext } from "react";
 import type { LocalOrder, Order, Uuid } from "./models";
 
 type Context = {
@@ -19,6 +16,7 @@ type Context = {
   swapRows: (idxOne: number, id2: number) => void;
   page: number;
   setPage: (page: number) => void;
+  highlightedOrderId: Uuid | null;
 };
 
 const ExcelContext = createContext<Context>({
@@ -36,8 +34,8 @@ const ExcelContext = createContext<Context>({
   swapRows: () => {},
   page: 1,
   setPage: () => {},
+  highlightedOrderId: null,
 });
-
 
 const useExcelContext = () => {
   return useContext(ExcelContext);
