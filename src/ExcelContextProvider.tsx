@@ -14,6 +14,7 @@ import { isInvalidAmount } from "./util";
 const ExcelContextProvider = (props: { children: React.ReactNode }) => {
   const [apiData, setApiData] = useState<Order[]>(initialData);
   const [data, setData] = useState<LocalOrder[]>([]);
+  const [page, setPage] = useState(1);
 
   const [updatedOrdersIds, setUpdatedOrdersIds] = useState<Uuid[]>([]);
   const [hiddenOrderIds, setHiddenOrderIds] = useState<Uuid[]>([]);
@@ -30,9 +31,10 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
 
   const formattedData = useMemo(() => {
     return data
+      .slice((page - 1) * 10, page * 10)
       .filter(({ id }) => !hiddenOrdersIdSet.has(id))
       .sort((a, b) => a.position - b.position);
-  }, [data, hiddenOrdersIdSet]);
+  }, [data, hiddenOrdersIdSet, page]);
 
   useEffect(() => {
     setData(apiData.map((d, idx) => ({ ...d, position: idx + 1 })));
@@ -126,7 +128,7 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
 
   const showAllRows = () => {
     setHiddenOrderIds([]);
-  }
+  };
 
   const deleteRow = (id: Uuid) => {
     setData((oldData) => oldData.filter((d) => d.id !== id));
@@ -145,6 +147,8 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
       curr[newPosition - 1].position = newPosition;
       return [...curr];
     });
+
+    setPage(Math.ceil(newPosition / 10));
     isReOrdered.current = true;
   };
 
@@ -163,6 +167,8 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
         showAllRows,
         deleteRow,
         swapRows,
+        page,
+        setPage
       }}
     >
       {props.children}

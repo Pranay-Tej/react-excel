@@ -7,6 +7,7 @@ import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useState } from "react";
 import type { OrderType } from "./models";
 import clsx from "clsx";
+import PageNumber from "./PageNumber";
 
 function Excel() {
   const {
@@ -50,8 +51,8 @@ function Excel() {
 
       <hr />
 
-      <button className="btn" onClick={showAllRows} disabled={isInvalid}>
-        Show all orders
+      <button className="btn" onClick={showAllRows}>
+        Clear filters
       </button>
 
       <hr />
@@ -151,6 +152,9 @@ function Excel() {
           ))}
         </tbody>
       </table>
+
+      <PageNumber />
+      <hr />
 
       <button className="btn" onClick={addNewRow}>
         Add New

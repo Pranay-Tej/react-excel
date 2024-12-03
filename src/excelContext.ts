@@ -17,6 +17,8 @@ type Context = {
   hideRow: (id: Uuid) => void;
   showAllRows: () => void;
   swapRows: (idxOne: number, id2: number) => void;
+  page: number;
+  setPage: (page: number) => void;
 };
 
 const ExcelContext = createContext<Context>({
@@ -32,6 +34,8 @@ const ExcelContext = createContext<Context>({
   hideRow: () => {},
   showAllRows: () => {},
   swapRows: () => {},
+  page: 1,
+  setPage: () => {},
 });
 
 
