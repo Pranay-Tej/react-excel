@@ -8,19 +8,14 @@ export type Order = {
   amount: number;
   notes?: string;
   date: Date;
+  symbol: string;
 };
 
 export type LocalOrder = Order & {
   position: number;
 };
 
-export type ApiPayloadOrder = {
-  id: Uuid;
-  type: OrderType;
-  amount: number;
-  notes?: string;
-  date: Date;
-};
+export type ApiPayloadOrder = Order;
 
 export type ApiPayload = {
   new_orders: ApiPayloadOrder[];

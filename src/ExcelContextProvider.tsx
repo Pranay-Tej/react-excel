@@ -10,6 +10,7 @@ import type {
 } from "./models";
 import { NEW_ORDER_PREFIX, initialData } from "./constants";
 import { isInvalidAmount, moveItemsInArray } from "./util";
+import { faker } from "@faker-js/faker";
 
 const ExcelContextProvider = (props: { children: React.ReactNode }) => {
   const [apiData, setApiData] = useState<Order[]>(initialData);
@@ -72,11 +73,16 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
       ...oldData,
       {
         id: newId,
-        amount: 100,
+        amount: faker.number.float({
+          min: 100,
+          max: 1000,
+          fractionDigits: 1,
+        }),
         notes: `Order notes`,
         date: new Date(),
         type: "buy",
         position: oldData.length + 1,
+        symbol: faker.finance.currencyCode(),
       },
     ]);
     isReOrdered.current = true;
@@ -98,12 +104,13 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
     const newOrders: ApiPayloadOrder[] = data
       .filter((d) => d.id.includes(NEW_ORDER_PREFIX))
       .map((d) => {
-        const { amount, date, notes, type } = d;
+        const { amount, date, notes, type, symbol } = d;
         return {
           amount,
           date,
           notes,
           type,
+          symbol,
           id: d.id.replace(NEW_ORDER_PREFIX, ""),
         };
       });

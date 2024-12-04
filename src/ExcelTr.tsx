@@ -69,7 +69,8 @@ export default function ExcelTr(props: Props) {
       <td>
         <SerialNumField currentPosition={order.position} key={order.position} />
       </td>
-      <td>{order.id}</td>
+      <td>{order.symbol}</td>
+      {/* <td>{order.id}</td> */}
       <td>
         <select
           value={order.type}

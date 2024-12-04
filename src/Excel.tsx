@@ -147,7 +147,8 @@ function Excel() {
           <tr>
             {/* <th>Sl no. (read)</th> */}
             <th>Sl no.</th>
-            <th>id</th>
+            <th>Symbol</th>
+            {/* <th>id</th> */}
             <th>Type</th>
             <th>Price</th>
             {/* <th>Notes(Optional)</th> */}
