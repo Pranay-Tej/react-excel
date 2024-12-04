@@ -25,7 +25,7 @@ function Excel() {
   } = useExcelContext();
   const [isAnimationsEnabled, setIsAnimationsEnabled] = useState(true);
   const [parent, enableAnimations] = useAutoAnimate({
-    duration: 600,
+    duration: 300,
   });
 
   return (

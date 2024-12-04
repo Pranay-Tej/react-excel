@@ -13,7 +13,7 @@ type Context = {
   deleteRow: (id: Uuid) => void;
   hideRow: (id: Uuid) => void;
   showAllRows: () => void;
-  swapRows: (idxOne: number, id2: number) => void;
+  moveRows: (idxOne: number, id2: number) => void;
   page: number;
   setPage: (page: number) => void;
   highlightedOrderId: Uuid | null;
@@ -31,7 +31,7 @@ const ExcelContext = createContext<Context>({
   deleteRow: () => {},
   hideRow: () => {},
   showAllRows: () => {},
-  swapRows: () => {},
+  moveRows: () => {},
   page: 1,
   setPage: () => {},
   highlightedOrderId: null,

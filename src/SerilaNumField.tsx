@@ -9,11 +9,11 @@ type Props = {
 export default function SerialNumField(props: Props) {
     const [value, setValue] = useState(props.currentPosition);
 
-    const { data, swapRows } = useExcelContext()
+    const { data, moveRows } = useExcelContext()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    const debouncedSwapRows = useCallback(
-        debounce(swapRows, 400),
+    const debouncedMoveRows = useCallback(
+        debounce(moveRows, 400),
         [],
       );
 
@@ -32,7 +32,7 @@ export default function SerialNumField(props: Props) {
         setValue(newNumber);
 
 
-        debouncedSwapRows(props.currentPosition, newNumber);
+        debouncedMoveRows(props.currentPosition, newNumber);
         // swapRows(props.currentIndex, newNumber - 1);
     }
 

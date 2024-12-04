@@ -15,7 +15,9 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
   const [apiData, setApiData] = useState<Order[]>(initialData);
   const [data, setData] = useState<LocalOrder[]>([]);
   const [page, setPage] = useState(1);
-  const [highlightedOrderId, setHighlightedOrderId] = useState<Uuid | null>(null);
+  const [highlightedOrderId, setHighlightedOrderId] = useState<Uuid | null>(
+    null
+  );
 
   const [updatedOrdersIds, setUpdatedOrdersIds] = useState<Uuid[]>([]);
   const [hiddenOrderIds, setHiddenOrderIds] = useState<Uuid[]>([]);
@@ -44,11 +46,11 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setHighlightedOrderId(null);
-    }, 3500)
+    }, 3000);
 
     return () => {
       clearTimeout(timeoutId);
-    }
+    };
   }, [highlightedOrderId]);
 
   const isInvalid = useMemo(() => {
@@ -111,11 +113,13 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
       modified_orders: updatedOrders,
       deleted_orders: Array.from(deletedOrdersIdSet.current),
       ...(isReOrdered.current && {
-        updated_arrangement: data.map((d) =>
-          d.id.includes(NEW_ORDER_PREFIX)
-            ? d.id.replace(NEW_ORDER_PREFIX, "")
-            : d.id
-        ),
+        updated_arrangement: data
+          .sort((a, b) => a.position - b.position)
+          .map((d) =>
+            d.id.includes(NEW_ORDER_PREFIX)
+              ? d.id.replace(NEW_ORDER_PREFIX, "")
+              : d.id
+          ),
       }),
     };
 
@@ -142,25 +146,36 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
   };
 
   const deleteRow = (id: Uuid) => {
-    setData((oldData) => oldData.filter((d) => d.id !== id));
+    setData((oldData) => {
+      return oldData
+        .filter((d) => d.id !== id)
+        .map((item, idx) => ({ ...item, position: idx + 1 }));
+    });
     if (!id.includes(NEW_ORDER_PREFIX)) {
       deletedOrdersIdSet.current.add(id);
     }
     isReOrdered.current = true;
   };
 
-  const swapRows = (currentPosition: number, newPosition: number) => {
-    setData((curr) => {
-      const temp = curr[currentPosition - 1];
-      curr[currentPosition - 1] = curr[newPosition - 1];
-      curr[currentPosition - 1].position = currentPosition;
-      curr[newPosition - 1] = temp;
-      curr[newPosition - 1].position = newPosition;
-      return [...curr];
+  const moveRows = (currentPosition: number, newPosition: number) => {
+    setHighlightedOrderId(null);
+    const itemToMove = data[currentPosition - 1];
+    let newArr = [
+      ...data.slice(0, currentPosition - 1),
+      ...data.slice(currentPosition),
+    ];
+    newArr.splice(newPosition - 1, 0, itemToMove);
+    newArr = newArr.map((item, idx) => {
+      return {
+        ...item,
+        position: idx + 1,
+      };
     });
 
+    setData(newArr);
+
     setPage(Math.ceil(newPosition / 10));
-    setHighlightedOrderId(data[newPosition - 1].id);
+    setHighlightedOrderId(newArr[newPosition - 1].id);
     isReOrdered.current = true;
   };
 
@@ -178,10 +193,10 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
         hideRow,
         showAllRows,
         deleteRow,
-        swapRows,
+        moveRows,
         page,
         setPage,
-        highlightedOrderId
+        highlightedOrderId,
       }}
     >
       {props.children}

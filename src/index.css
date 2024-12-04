@@ -89,5 +89,8 @@ tr.edited td{
   background-color: hsl(240, 30%, 90%);
 }
 tr.highlighted td{
-  border-color: hsl(241, 77%, 68%);
+  border-color: hsl(228, 100%, 67%);
 }
+/* tr.highlighted{
+  border: hsl(228, 100%, 67%);
+} */
