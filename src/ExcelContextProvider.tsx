@@ -76,8 +76,7 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
 
   const addNewRow = () => {
     const newId = `${NEW_ORDER_PREFIX}${uuidv4()}`;
-    setData((oldData) => [
-      ...oldData,
+    const newState: LocalOrder[] = [
       {
         id: newId,
         amount: faker.number.float({
@@ -88,10 +87,12 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
         notes: `Order notes`,
         date: new Date(),
         type: "buy",
-        position: oldData.length + 1,
+        position: data.length + 1,
         symbol: faker.finance.currencyCode(),
       },
-    ]);
+      ...data,
+    ];
+    setData(newState.map((d, idx) => ({ ...d, position: idx + 1 })));
     isReOrdered.current = true;
   };
 
