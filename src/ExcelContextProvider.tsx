@@ -54,7 +54,7 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setHighlightedOrderId(null);
-    }, 3000);
+    }, 2700);
 
     return () => {
       clearTimeout(timeoutId);
@@ -240,6 +240,7 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
         newIndexInOriginalList
       ).map((item, idx) => ({ ...item, position: idx + 1 }));
       setData(newItemOrder);
+      setHighlightedOrderId(newItemOrder[newIndexInOriginalList].id);
     },
     [data, formattedData]
   );

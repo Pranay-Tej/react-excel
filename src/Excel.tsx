@@ -79,6 +79,10 @@ function Excel() {
         Clear filters
       </button>
 
+      <button className="btn" onClick={addNewRow}>
+        Add New
+      </button>
+
       <hr />
       <table>
         <thead>
@@ -91,8 +95,8 @@ function Excel() {
             <th>Price</th>
             {/* <th>Notes(Optional)</th> */}
             <th>Date</th>
-            <th></th>
-            <th></th>
+            <th>Hide</th>
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody ref={parent}>
@@ -115,11 +119,6 @@ function Excel() {
       </table>
 
       <PageNumber />
-      <hr />
-
-      <button className="btn" onClick={addNewRow}>
-        Add New
-      </button>
     </div>
   );
 }

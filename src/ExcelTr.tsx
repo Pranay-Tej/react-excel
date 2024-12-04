@@ -115,7 +115,7 @@ export default function ExcelTr(props: Props) {
       </td>
       <td>
         <button
-          className="delete-btn"
+          className="icon-btn"
           onClick={() => hideRow(order.id)}
           title="hide row"
         >
@@ -124,7 +124,7 @@ export default function ExcelTr(props: Props) {
       </td>
       <td>
         <button
-          className="delete-btn"
+          className="icon-btn"
           onClick={() => deleteRow(order.id)}
           title="delete"
         >

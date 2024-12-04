@@ -15,11 +15,11 @@ export default function PageNumber() {
       }}
     >
       <button className="btn" disabled={page === 1} onClick={() => setPage(page - 1)}>
-        prev
+        Prev
       </button>
       <span>{page}</span>
       <button className="btn" disabled={page === totalPages} onClick={() => setPage(page + 1)}>
-        next
+        Next
       </button>
     </div>
   );

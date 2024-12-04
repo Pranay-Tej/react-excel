@@ -24,8 +24,9 @@ button.btn:disabled{
   background-color: hsl(234, 50%, 50%, 0.5);
 }
 
-button.delete-btn{
+button.icon-btn{
   border: none;
+  cursor: pointer;
 }
 body {
   font-family: sans-serif;
