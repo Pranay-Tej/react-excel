@@ -8,6 +8,21 @@ importers:
 
   .:
     dependencies:
+      '@dnd-kit/core':
+        specifier: 3.1.1
+        version: 3.1.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@dnd-kit/modifiers':
+        specifier: 3.0.0
+        version: 3.0.0(@dnd-kit/core@3.1.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+      '@dnd-kit/sortable':
+        specifier: 4.0.0
+        version: 4.0.0(@dnd-kit/core@3.1.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+      '@dnd-kit/utilities':
+        specifier: 3.2.2
+        version: 3.2.2(react@18.3.1)
+      '@faker-js/faker':
+        specifier: ^9.3.0
+        version: 9.3.0
       '@formkit/auto-animate':
         specifier: ^0.8.2
         version: 0.8.2
@@ -68,6 +83,36 @@ importers:
         version: 5.4.10
 
 packages:
+
+  '@dnd-kit/accessibility@3.1.1':
+    resolution: {integrity: sha512-2P+YgaXF+gRsIihwwY1gCsQSYnu9Zyj2py8kY5fFvUM1qm2WA2u639R6YNVfU4GWr+ZM5mqEsfHZZLoRONbemw==}
+    peerDependencies:
+      react: '>=16.8.0'
+
+  '@dnd-kit/core@3.1.1':
+    resolution: {integrity: sha512-18YY5+1lTqJbGSg6JBSa/fjAOTUYAysFrQ5Ti8oppEPHFacQbC+owM51y2z2KN0LkDHBfGZKw2sFT7++ttwfpA==}
+    peerDependencies:
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+
+  '@dnd-kit/modifiers@3.0.0':
+    resolution: {integrity: sha512-CmskqOcW4Bw61JP1Lqkx7cRzv9xQS/5seI+Q5eKhx+mS/MA5IrX2jgtMxvQ6PKYDnx2v/uHxqLNVhlvumtBTSQ==}
+    peerDependencies:
+      '@dnd-kit/core': ^3.1.0
+
+  '@dnd-kit/sortable@4.0.0':
+    resolution: {integrity: sha512-teYVFy6mQG/u6F6CaGxAkzPfiNJvguFzWfJ/zonYQRxfANHX6QJ6GziMG9KON/Ae9Q2ODJP8vib+guWJrDXeGg==}
+    peerDependencies:
+      '@dnd-kit/core': ^3.1.0
+      react: '>=16.8.0'
+
+  '@dnd-kit/utilities@2.0.0':
+    resolution: {integrity: sha512-bjs49yMNzMM+BYRsBUhTqhTk6HEvhuY3leFt6Em6NaYGgygaMbtGbbXof/UXBv7rqyyi0OkmBBnrCCcxqS2t/g==}
+
+  '@dnd-kit/utilities@3.2.2':
+    resolution: {integrity: sha512-+MKAJEOfaBe5SmV6t34p80MMKhjvUz0vRrvVJbPT0WElzaOJ/1xs+D+KDv+tD/NE5ujfrChEcshd4fLn0wpiqg==}
+    peerDependencies:
+      react: '>=16.8.0'
 
   '@esbuild/aix-ppc64@0.21.5':
     resolution: {integrity: sha512-1SDgH6ZSPTlggy1yI6+Dbkiz8xzpHJEVAlF/AM1tHPLsf5STom9rwtjE4hKAF20FfXXNTFqEYXyJNWh1GiZedQ==}
@@ -240,6 +285,10 @@ packages:
   '@eslint/plugin-kit@0.2.2':
     resolution: {integrity: sha512-CXtq5nR4Su+2I47WPOlWud98Y5Lv8Kyxp2ukhgFx/eW6Blm18VXJO5WuQylPugRo8nbluoi6GvvxBLqHcvqUUw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@faker-js/faker@9.3.0':
+    resolution: {integrity: sha512-r0tJ3ZOkMd9xsu3VRfqlFR6cz0V/jFYRswAIpC+m/DIfAUXq7g8N7wTAlhSANySXYGKzGryfDXwtwsY8TxEIDw==}
+    engines: {node: '>=18.0.0', npm: '>=9.0.0'}
 
   '@formkit/auto-animate@0.8.2':
     resolution: {integrity: sha512-SwPWfeRa5veb1hOIBMdzI+73te5puUBHmqqaF1Bu7FjvxlYSz/kJcZKSa9Cg60zL0uRNeJL2SbRxV6Jp6Q1nFQ==}
@@ -925,6 +974,9 @@ packages:
     peerDependencies:
       typescript: '>=4.2.0'
 
+  tslib@2.8.1:
+    resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
+
   type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
     engines: {node: '>= 0.8.0'}
@@ -995,6 +1047,41 @@ packages:
     engines: {node: '>=10'}
 
 snapshots:
+
+  '@dnd-kit/accessibility@3.1.1(react@18.3.1)':
+    dependencies:
+      react: 18.3.1
+      tslib: 2.8.1
+
+  '@dnd-kit/core@3.1.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@dnd-kit/accessibility': 3.1.1(react@18.3.1)
+      '@dnd-kit/utilities': 2.0.0
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      tslib: 2.8.1
+
+  '@dnd-kit/modifiers@3.0.0(@dnd-kit/core@3.1.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))':
+    dependencies:
+      '@dnd-kit/core': 3.1.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@dnd-kit/utilities': 2.0.0
+      tslib: 2.8.1
+
+  '@dnd-kit/sortable@4.0.0(@dnd-kit/core@3.1.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@dnd-kit/core': 3.1.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@dnd-kit/utilities': 2.0.0
+      react: 18.3.1
+      tslib: 2.8.1
+
+  '@dnd-kit/utilities@2.0.0':
+    dependencies:
+      tslib: 2.8.1
+
+  '@dnd-kit/utilities@3.2.2(react@18.3.1)':
+    dependencies:
+      react: 18.3.1
+      tslib: 2.8.1
 
   '@esbuild/aix-ppc64@0.21.5':
     optional: true
@@ -1103,6 +1190,8 @@ snapshots:
   '@eslint/plugin-kit@0.2.2':
     dependencies:
       levn: 0.4.1
+
+  '@faker-js/faker@9.3.0': {}
 
   '@formkit/auto-animate@0.8.2': {}
 
@@ -1754,6 +1843,8 @@ snapshots:
   ts-api-utils@1.4.0(typescript@5.6.3):
     dependencies:
       typescript: 5.6.3
+
+  tslib@2.8.1: {}
 
   type-check@0.4.0:
     dependencies:

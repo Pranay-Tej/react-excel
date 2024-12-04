@@ -17,6 +17,7 @@ type Context = {
   page: number;
   setPage: (page: number) => void;
   highlightedOrderId: Uuid | null;
+  reorderData: (data: LocalOrder[]) => void;
 };
 
 const ExcelContext = createContext<Context>({
@@ -35,6 +36,7 @@ const ExcelContext = createContext<Context>({
   page: 1,
   setPage: () => {},
   highlightedOrderId: null,
+  reorderData: () => {}
 });
 
 const useExcelContext = () => {

@@ -9,7 +9,7 @@ import type {
   Uuid,
 } from "./models";
 import { NEW_ORDER_PREFIX, initialData } from "./constants";
-import { isInvalidAmount } from "./util";
+import { isInvalidAmount, moveItemsInArray } from "./util";
 
 const ExcelContextProvider = (props: { children: React.ReactNode }) => {
   const [apiData, setApiData] = useState<Order[]>(initialData);
@@ -159,24 +159,19 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
 
   const moveRows = (currentPosition: number, newPosition: number) => {
     setHighlightedOrderId(null);
-    const itemToMove = data[currentPosition - 1];
-    let newArr = [
-      ...data.slice(0, currentPosition - 1),
-      ...data.slice(currentPosition),
-    ];
-    newArr.splice(newPosition - 1, 0, itemToMove);
-    newArr = newArr.map((item, idx) => {
-      return {
-        ...item,
-        position: idx + 1,
-      };
-    });
+
+    const newArr = moveItemsInArray(data, currentPosition - 1, newPosition - 1);
 
     setData(newArr);
 
     setPage(Math.ceil(newPosition / 10));
     setHighlightedOrderId(newArr[newPosition - 1].id);
     isReOrdered.current = true;
+  };
+
+  const reorderData = (newData: LocalOrder[]) => {
+    isReOrdered.current = true;
+    setData(newData);
   };
 
   return (
@@ -197,6 +192,7 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
         page,
         setPage,
         highlightedOrderId,
+        reorderData,
       }}
     >
       {props.children}
