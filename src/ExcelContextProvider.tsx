@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { v4 as uuidv4 } from "uuid";
 import { ExcelContext } from "./excelContext";
 import type {
@@ -11,6 +17,7 @@ import type {
 import { NEW_ORDER_PREFIX, initialData } from "./constants";
 import { isInvalidAmount, moveItemsInArray } from "./util";
 import { faker } from "@faker-js/faker";
+import { DragEndEvent } from "@dnd-kit/core";
 
 const ExcelContextProvider = (props: { children: React.ReactNode }) => {
   const [apiData, setApiData] = useState<Order[]>(initialData);
@@ -176,10 +183,66 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
     isReOrdered.current = true;
   };
 
-  const reorderData = (newData: LocalOrder[]) => {
-    isReOrdered.current = true;
-    setData(newData);
-  };
+  const handleDragEnd = useCallback(
+    (e: DragEndEvent) => {
+      isReOrdered.current = true;
+
+      const { active, over } = e;
+      if (active?.id === over?.id) {
+        return;
+      }
+      const oldIndex = formattedData.findIndex((item) => item.id === active.id);
+      const newIndex = formattedData.findIndex((item) => item.id === over?.id);
+      if (oldIndex === -1 || newIndex === -1) {
+        return;
+      }
+
+      // the filtered order user sees
+      const newFilteredOrder = moveItemsInArray(
+        formattedData,
+        oldIndex,
+        newIndex
+      );
+
+      // if the items are filtered, the dragged item should be placed before to the item below it in the original list
+      const indexInOriginalList = data.findIndex(
+        (item) => item.id === active.id
+      );
+      if (indexInOriginalList === -1) {
+        return;
+      }
+      let newIndexInOriginalList = -1;
+      if (newIndex === formattedData.length - 1) {
+        // if moved to the extreme bottom, move to the last in original list
+        newIndexInOriginalList = data.length - 1;
+      } else {
+        // get the item below in new filtered list
+        const itemBelowActiveItem = newFilteredOrder[newIndex + 1];
+        // get position of that item in original list
+        const itemBelowIndexInOriginalList = data.findIndex(
+          (item) => item.id === itemBelowActiveItem.id
+        );
+        // place the dragged item just above that item in original list
+        if (newIndex > oldIndex) {
+          // dragging down its original position
+          newIndexInOriginalList = itemBelowIndexInOriginalList - 1;
+        } else {
+          // dragging up its original position
+          newIndexInOriginalList = itemBelowIndexInOriginalList;
+        }
+      }
+      if (newIndexInOriginalList === -1) {
+        return;
+      }
+      const newItemOrder = moveItemsInArray(
+        data,
+        indexInOriginalList,
+        newIndexInOriginalList
+      ).map((item, idx) => ({ ...item, position: idx + 1 }));
+      setData(newItemOrder);
+    },
+    [data, formattedData]
+  );
 
   return (
     <ExcelContext.Provider
@@ -199,7 +262,7 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
         page,
         setPage,
         highlightedOrderId,
-        reorderData,
+        handleDragEnd,
       }}
     >
       {props.children}

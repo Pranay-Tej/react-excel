@@ -1,11 +1,9 @@
 import { useExcelContext } from "./excelContext";
-import { moveItemsInArray } from "./util";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import PageNumber from "./PageNumber";
 import {
   DndContext,
-  DragEndEvent,
   KeyboardSensor,
   PointerSensor,
   closestCenter,
@@ -25,14 +23,13 @@ import ExcelTr from "./ExcelTr";
 
 function Excel() {
   const {
-    data,
     formattedData,
     isInvalid,
     addNewRow,
     handleCancel,
     handleSave,
     showAllRows,
-    reorderData,
+    handleDragEnd,
   } = useExcelContext();
   const [isAnimationsEnabled, setIsAnimationsEnabled] = useState(true);
   const [parent, enableAnimations] = useAutoAnimate({
@@ -52,65 +49,6 @@ function Excel() {
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
-  );
-
-  const handleDragEnd = useCallback(
-    (e: DragEndEvent) => {
-      const { active, over } = e;
-      if (active?.id === over?.id) {
-        return;
-      }
-      const oldIndex = formattedData.findIndex((item) => item.id === active.id);
-      const newIndex = formattedData.findIndex((item) => item.id === over?.id);
-      if (oldIndex === -1 || newIndex === -1) {
-        return;
-      }
-
-      // the filtered order user sees
-      const newFilteredOrder = moveItemsInArray(
-        formattedData,
-        oldIndex,
-        newIndex
-      );
-
-      // if the items are filtered, the dragged item should be placed before to the item below it in the original list
-      const indexInOriginalList = data.findIndex(
-        (item) => item.id === active.id
-      );
-      if (indexInOriginalList === -1) {
-        return;
-      }
-      let newIndexInOriginalList = -1;
-      if (newIndex === formattedData.length - 1) {
-        // if moved to the extreme bottom, move to the last in original list
-        newIndexInOriginalList = data.length - 1;
-      } else {
-        // get the item below in new filtered list
-        const itemBelowActiveItem = newFilteredOrder[newIndex + 1];
-        // get position of that item in original list
-        const itemBelowIndexInOriginalList = data.findIndex(
-          (item) => item.id === itemBelowActiveItem.id
-        );
-        // place the dragged item just above that item in original list
-        if (newIndex > oldIndex) {
-          // dragging down its original position
-          newIndexInOriginalList = itemBelowIndexInOriginalList - 1;
-        } else {
-          // dragging up its original position
-          newIndexInOriginalList = itemBelowIndexInOriginalList;
-        }
-      }
-      if (newIndexInOriginalList === -1) {
-        return;
-      }
-      const newItemOrder = moveItemsInArray(
-        data,
-        indexInOriginalList,
-        newIndexInOriginalList
-      ).map((item, idx) => ({ ...item, position: idx + 1 }));
-      reorderData(newItemOrder);
-    },
-    [data, formattedData]
   );
 
   return (

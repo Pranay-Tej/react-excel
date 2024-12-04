@@ -1,5 +1,6 @@
 import { createContext, useContext } from "react";
 import type { LocalOrder, Order, Uuid } from "./models";
+import { DragEndEvent } from "@dnd-kit/core";
 
 type Context = {
   data: LocalOrder[];
@@ -17,7 +18,7 @@ type Context = {
   page: number;
   setPage: (page: number) => void;
   highlightedOrderId: Uuid | null;
-  reorderData: (data: LocalOrder[]) => void;
+  handleDragEnd: (e: DragEndEvent) => void;
 };
 
 const ExcelContext = createContext<Context>({
@@ -36,7 +37,7 @@ const ExcelContext = createContext<Context>({
   page: 1,
   setPage: () => {},
   highlightedOrderId: null,
-  reorderData: () => {}
+  handleDragEnd: () => {}
 });
 
 const useExcelContext = () => {
