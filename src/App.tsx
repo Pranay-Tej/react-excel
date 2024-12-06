@@ -1,6 +1,6 @@
 import "./App.css";
-import Excel from "./Excel";
-import ExcelContextProvider from "./ExcelContextProvider";
+import Excel from "./excel-components/Excel";
+import ExcelContextProvider from "./excel-components/ExcelContextProvider";
 
 function App() {
   return (

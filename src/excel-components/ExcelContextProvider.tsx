@@ -12,9 +12,9 @@ import type {
   LocalOrder,
   Order,
   Uuid,
-} from "./models";
-import { NEW_ORDER_PREFIX, initialData } from "./constants";
-import { isInvalidAmount, isInvalidSymbol, moveItemsInArray } from "./util";
+} from "../models";
+import { NEW_ORDER_PREFIX, initialData } from "../constants";
+import { isInvalidAmount, isInvalidSymbol, moveItemsInArray } from "../util";
 import { faker } from "@faker-js/faker";
 import { DragEndEvent } from "@dnd-kit/core";
 
