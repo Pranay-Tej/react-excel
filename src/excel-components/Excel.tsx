@@ -26,8 +26,7 @@ type Props = {
 };
 
 function Excel(props: Props) {
-  const { formattedData, addNewRow, showAllRows, handleDragEnd } =
-    useExcelContext();
+  const { formattedData, addNewRow, handleDragEnd } = useExcelContext();
   const [isAnimationsEnabled, setIsAnimationsEnabled] = useState(true);
   const [parent, enableAnimations] = useAutoAnimate({
     duration: 300,
@@ -70,12 +69,6 @@ function Excel(props: Props) {
         Save
       </button> */}
 
-      <hr />
-
-      <button className="btn" onClick={showAllRows}>
-        Clear filters
-      </button>
-
       <button className="btn" onClick={addNewRow}>
         Add New
       </button>
@@ -92,7 +85,6 @@ function Excel(props: Props) {
             <th>Price</th>
             {/* <th>Notes(Optional)</th> */}
             <th>Date</th>
-            <th>Hide</th>
             <th>Delete</th>
           </tr>
         </thead>

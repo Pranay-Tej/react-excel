@@ -1,9 +1,9 @@
 import { useExcelContext } from "./excelContext";
 
 export default function PageNumber() {
-  const { page, setPage, data } = useExcelContext();
+  const { page, setPage, formattedData } = useExcelContext();
 
-  const totalPages = Math.ceil(data.length / 10);
+  const totalPages = Math.ceil(formattedData.length / 10);
 
   return (
     <div
@@ -14,11 +14,19 @@ export default function PageNumber() {
         gap: "4px",
       }}
     >
-      <button className="btn" disabled={page === 1} onClick={() => setPage(page - 1)}>
+      <button
+        className="btn"
+        disabled={page === 1}
+        onClick={() => setPage(page - 1)}
+      >
         Prev
       </button>
       <span>{page}</span>
-      <button className="btn" disabled={page === totalPages} onClick={() => setPage(page + 1)}>
+      <button
+        className="btn"
+        disabled={page === totalPages}
+        onClick={() => setPage(page + 1)}
+      >
         Next
       </button>
     </div>

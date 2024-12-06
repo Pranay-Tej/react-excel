@@ -1,7 +1,15 @@
+import { useMemo } from "react";
 import { useBulkEditContext } from "./bulkEditContext";
+import type { Uuid } from "../models";
 
 export default function ReadView() {
-  const { setIsEditing, apiData } = useBulkEditContext();
+  const { setIsEditing, apiData, hideRow, hiddenOrderIds } =
+    useBulkEditContext();
+
+  const hiddenOrderIdsSet = useMemo<Set<Uuid>>(() => {
+    return new Set(hiddenOrderIds);
+  }, [hiddenOrderIds]);
+
   return (
     <div>
       <button className="btn" onClick={() => setIsEditing(true)}>
@@ -15,6 +23,7 @@ export default function ReadView() {
             <th>Type</th>
             <th>Price</th>
             <th>Date</th>
+            <th>Hide</th>
           </tr>
         </thead>
         <tbody>
@@ -24,6 +33,20 @@ export default function ReadView() {
               <td>{d.type}</td>
               <td>{d.amount}</td>
               <td>{d.date.toDateString()}</td>
+              <td>
+                {hiddenOrderIdsSet.has(d.id) ? (
+                  "hidden"
+                ) : (
+                  <button
+                    className="icon-btn"
+                    onClick={() => hideRow(d.id)}
+                    title="hide row"
+                    disabled={hiddenOrderIdsSet.has(d.id)}
+                  >
+                    👀
+                  </button>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>

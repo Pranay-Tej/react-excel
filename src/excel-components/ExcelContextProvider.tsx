@@ -20,9 +20,10 @@ import { DragEndEvent } from "@dnd-kit/core";
 
 const ExcelContextProvider = (props: {
   initialData: Order[];
+  hiddenOrderIds: Uuid[];
   children: React.ReactNode;
 }) => {
-  const { initialData } = props;
+  const { initialData, hiddenOrderIds } = props;
   // const [apiData, setApiData] = useState<Order[]>(initialData);
   const [data, setData] = useState<LocalOrder[]>([]);
   const [page, setPage] = useState(1);
@@ -31,7 +32,6 @@ const ExcelContextProvider = (props: {
   );
 
   const [updatedOrdersIds, setUpdatedOrdersIds] = useState<Uuid[]>([]);
-  const [hiddenOrderIds, setHiddenOrderIds] = useState<Uuid[]>([]);
   const deletedOrdersIdSet = useRef<Set<Uuid>>(new Set());
   const isReOrdered = useRef(false);
 
@@ -45,9 +45,9 @@ const ExcelContextProvider = (props: {
 
   const formattedData = useMemo(() => {
     return data
-      .slice((page - 1) * 10, page * 10)
       .filter(({ id }) => !hiddenOrdersIdSet.has(id))
-      .sort((a, b) => a.position - b.position);
+      .sort((a, b) => a.position - b.position)
+      .slice((page - 1) * 10, page * 10);
   }, [data, hiddenOrdersIdSet, page]);
 
   useEffect(() => {
@@ -161,14 +161,6 @@ const ExcelContextProvider = (props: {
     // isReOrdered.current = false;
   };
 
-  const hideRow = (id: Uuid) => {
-    setHiddenOrderIds((curr) => [...curr, id]);
-  };
-
-  const showAllRows = () => {
-    setHiddenOrderIds([]);
-  };
-
   const deleteRow = (id: Uuid) => {
     setData((oldData) => {
       return oldData
@@ -266,8 +258,6 @@ const ExcelContextProvider = (props: {
         addNewRow,
         handleCancel,
         handleSave,
-        hideRow,
-        showAllRows,
         deleteRow,
         moveRows,
         page,

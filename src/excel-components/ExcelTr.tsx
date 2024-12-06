@@ -20,7 +20,6 @@ export default function ExcelTr(props: Props) {
     data,
     updatedOrdersIdsSet,
     handleValueChange,
-    hideRow,
     deleteRow,
     highlightedOrderId,
     moveRows,
@@ -133,15 +132,6 @@ export default function ExcelTr(props: Props) {
             handleValueChange({ date: new Date(e.target.value) }, order.id)
           }
         />
-      </td>
-      <td>
-        <button
-          className="icon-btn"
-          onClick={() => hideRow(order.id)}
-          title="hide row"
-        >
-          👀
-        </button>
       </td>
       <td>
         <button

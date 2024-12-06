@@ -14,8 +14,6 @@ type Context = {
     onConfirm?: (payload: ApiPayload, data: LocalOrder[]) => void
   ) => void;
   deleteRow: (id: Uuid) => void;
-  hideRow: (id: Uuid) => void;
-  showAllRows: () => void;
   moveRows: (currentPosition: number, newPosition: number) => void;
   page: number;
   setPage: (page: number) => void;
@@ -33,8 +31,6 @@ const ExcelContext = createContext<Context>({
   handleCancel: () => {},
   handleSave: () => {},
   deleteRow: () => {},
-  hideRow: () => {},
-  showAllRows: () => {},
   moveRows: () => {},
   page: 1,
   setPage: () => {},
