@@ -19,14 +19,14 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import ExcelTr from "./ExcelTr";
+import BulkEditExcelTr from "./BulkEditExcelTr";
 
 type Props = {
   isSortable?: boolean;
 };
 
-function Excel(props: Props) {
-  const { formattedData, addNewRow, handleDragEnd } = useExcelContext();
+function BulkEditExcel(props: Props) {
+  const { formattedData, handleDragEnd } = useExcelContext();
   const [isAnimationsEnabled, setIsAnimationsEnabled] = useState(true);
   const [parent, enableAnimations] = useAutoAnimate({
     duration: 300,
@@ -69,10 +69,6 @@ function Excel(props: Props) {
         Save
       </button> */}
 
-      <button className="btn" onClick={addNewRow}>
-        Add New
-      </button>
-
       <hr />
       <table>
         <thead>
@@ -101,12 +97,12 @@ function Excel(props: Props) {
                 strategy={verticalListSortingStrategy}
               >
                 {formattedData.map((d) => (
-                  <ExcelTr key={d.id} order={d} isSortable />
+                  <BulkEditExcelTr key={d.id} order={d} isSortable />
                 ))}
               </SortableContext>
             </DndContext>
           ) : (
-            formattedData.map((d) => <ExcelTr key={d.id} order={d} />)
+            formattedData.map((d) => <BulkEditExcelTr key={d.id} order={d} />)
           )}
         </tbody>
       </table>
@@ -116,4 +112,4 @@ function Excel(props: Props) {
   );
 }
 
-export default Excel;
+export default BulkEditExcel;

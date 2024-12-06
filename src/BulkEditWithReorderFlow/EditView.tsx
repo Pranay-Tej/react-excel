@@ -1,4 +1,4 @@
-import Excel from "../excel-components/Excel";
+import BulkEditExcel from "../excel-components/BulkEditExcel";
 import { useExcelContext } from "../excel-components/excelContext";
 import { useBulkEditContext } from "./bulkEditContext";
 
@@ -13,7 +13,7 @@ export default function EditView() {
     setError,
   } = useBulkEditContext();
 
-  const { handleSave, isInvalid } = useExcelContext();
+  const { handleSave, isInvalid, addNewRow } = useExcelContext();
 
   return (
     <div
@@ -21,7 +21,11 @@ export default function EditView() {
         position: "relative",
       }}
     >
-      <Excel isSortable />
+      <button className="btn" onClick={addNewRow}>
+        Add New
+      </button>
+
+      <BulkEditExcel isSortable />
 
       {error && (
         <p

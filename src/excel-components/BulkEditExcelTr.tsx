@@ -14,7 +14,7 @@ type Props = {
   isSortable?: boolean;
 };
 
-export default function ExcelTr(props: Props) {
+export default function BulkEditExcelTr(props: Props) {
   const { order, isSortable = false } = props;
   const {
     data,
