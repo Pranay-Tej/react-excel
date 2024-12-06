@@ -21,16 +21,13 @@ import {
 } from "@dnd-kit/sortable";
 import ExcelTr from "./ExcelTr";
 
-function Excel() {
-  const {
-    formattedData,
-    isInvalid,
-    addNewRow,
-    handleCancel,
-    handleSave,
-    showAllRows,
-    handleDragEnd,
-  } = useExcelContext();
+type Props = {
+  isSortable?: boolean;
+};
+
+function Excel(props: Props) {
+  const { formattedData, addNewRow, showAllRows, handleDragEnd } =
+    useExcelContext();
   const [isAnimationsEnabled, setIsAnimationsEnabled] = useState(true);
   const [parent, enableAnimations] = useAutoAnimate({
     duration: 300,
@@ -66,12 +63,12 @@ function Excel() {
       </div>
       <hr />
 
-      <button className="btn" onClick={handleCancel}>
+      {/* <button className="btn" onClick={handleCancel}>
         Cancel
-      </button>
-      <button className="btn" onClick={handleSave} disabled={isInvalid}>
+      </button> */}
+      {/* <button className="btn" onClick={handleSave} disabled={isInvalid}>
         Save
-      </button>
+      </button> */}
 
       <hr />
 
@@ -88,7 +85,7 @@ function Excel() {
         <thead>
           <tr>
             {/* <th>Sl no. (read)</th> */}
-            <th>Sl no.</th>
+            {props.isSortable && <th>Sl no.</th>}
             <th>Symbol</th>
             {/* <th>id</th> */}
             <th>Type</th>
@@ -100,21 +97,25 @@ function Excel() {
           </tr>
         </thead>
         <tbody ref={parent}>
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
-            modifiers={[restrictToVerticalAxis, restrictToParentElement]}
-          >
-            <SortableContext
-              items={dndKitItemIds}
-              strategy={verticalListSortingStrategy}
+          {props.isSortable ? (
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+              modifiers={[restrictToVerticalAxis, restrictToParentElement]}
             >
-              {formattedData.map((d) => (
-                <ExcelTr key={d.id} order={d} />
-              ))}
-            </SortableContext>
-          </DndContext>
+              <SortableContext
+                items={dndKitItemIds}
+                strategy={verticalListSortingStrategy}
+              >
+                {formattedData.map((d) => (
+                  <ExcelTr key={d.id} order={d} isSortable />
+                ))}
+              </SortableContext>
+            </DndContext>
+          ) : (
+            formattedData.map((d) => <ExcelTr key={d.id} order={d} />)
+          )}
         </tbody>
       </table>
 

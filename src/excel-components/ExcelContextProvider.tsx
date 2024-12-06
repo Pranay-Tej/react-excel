@@ -13,13 +13,17 @@ import type {
   Order,
   Uuid,
 } from "../models";
-import { NEW_ORDER_PREFIX, initialData } from "../constants";
+import { NEW_ORDER_PREFIX } from "../constants";
 import { isInvalidAmount, isInvalidSymbol, moveItemsInArray } from "../util";
 import { faker } from "@faker-js/faker";
 import { DragEndEvent } from "@dnd-kit/core";
 
-const ExcelContextProvider = (props: { children: React.ReactNode }) => {
-  const [apiData, setApiData] = useState<Order[]>(initialData);
+const ExcelContextProvider = (props: {
+  initialData: Order[];
+  children: React.ReactNode;
+}) => {
+  const { initialData } = props;
+  // const [apiData, setApiData] = useState<Order[]>(initialData);
   const [data, setData] = useState<LocalOrder[]>([]);
   const [page, setPage] = useState(1);
   const [highlightedOrderId, setHighlightedOrderId] = useState<Uuid | null>(
@@ -47,8 +51,8 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
   }, [data, hiddenOrdersIdSet, page]);
 
   useEffect(() => {
-    setData(apiData.map((d, idx) => ({ ...d, position: idx + 1 })));
-  }, [apiData]);
+    setData(initialData.map((d, idx) => ({ ...d, position: idx + 1 })));
+  }, [initialData]);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -98,13 +102,15 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
   };
 
   const handleCancel = () => {
-    setData(apiData.map((d, idx) => ({ ...d, position: idx + 1 })));
+    // setData(apiData.map((d, idx) => ({ ...d, position: idx + 1 })));
     setUpdatedOrdersIds([]);
     deletedOrdersIdSet.current.clear();
     isReOrdered.current = false;
   };
 
-  const handleSave = () => {
+  const handleSave = (
+    onConfirm?: (payload: ApiPayload, data: LocalOrder[]) => void
+  ) => {
     if (isInvalid) {
       return;
     }
@@ -139,18 +145,20 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
       }),
     };
 
+    onConfirm?.(payload, data);
+
     // call api, get new data
-    const newData: Order[] = data.map((d) => ({
-      ...d,
-      id: d.id.includes(NEW_ORDER_PREFIX) ? crypto.randomUUID() : d.id,
-    }));
-    setApiData(newData);
+    // const newData: Order[] = data.map((d) => ({
+    //   ...d,
+    //   id: d.id.includes(NEW_ORDER_PREFIX) ? crypto.randomUUID() : d.id,
+    // }));
+    // setApiData(newData);
 
-    console.log(payload);
+    // console.log(payload);
 
-    setUpdatedOrdersIds([]);
-    deletedOrdersIdSet.current.clear();
-    isReOrdered.current = false;
+    // setUpdatedOrdersIds([]);
+    // deletedOrdersIdSet.current.clear();
+    // isReOrdered.current = false;
   };
 
   const hideRow = (id: Uuid) => {

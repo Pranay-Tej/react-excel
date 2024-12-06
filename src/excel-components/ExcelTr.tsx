@@ -11,10 +11,11 @@ import { useEffect, useRef } from "react";
 
 type Props = {
   order: LocalOrder;
+  isSortable?: boolean;
 };
 
 export default function ExcelTr(props: Props) {
-  const { order } = props;
+  const { order, isSortable = false } = props;
   const {
     data,
     updatedOrdersIdsSet,
@@ -30,7 +31,7 @@ export default function ExcelTr(props: Props) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
       id: props.order.id,
-      disabled: true,
+      disabled: isSortable === false,
     });
   const dndProps = { ...attributes, ...listeners };
 
@@ -52,7 +53,7 @@ export default function ExcelTr(props: Props) {
       ref={rowRef}
       style={{
         userSelect: "none",
-        // cursor: "move",
+        ...(isSortable && { cursor: "grab" }),
         transform: CSS.Transform.toString(
           transform
             ? {
@@ -68,13 +69,15 @@ export default function ExcelTr(props: Props) {
       {...dndProps}
     >
       {/* <td>{d.position}</td> */}
-      <td>
-        <SerialNumField
-          currentPosition={order.position}
-          maxValue={data.length}
-          moveRows={moveRows}
-        />
-      </td>
+      {isSortable && (
+        <td>
+          <SerialNumField
+            currentPosition={order.position}
+            maxValue={data.length}
+            moveRows={moveRows}
+          />
+        </td>
+      )}
       <td>
         <input
           type="text"

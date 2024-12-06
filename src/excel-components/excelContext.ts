@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import type { LocalOrder, Order, Uuid } from "../models";
+import type { ApiPayload, LocalOrder, Order, Uuid } from "../models";
 import { DragEndEvent } from "@dnd-kit/core";
 
 type Context = {
@@ -10,7 +10,9 @@ type Context = {
   handleValueChange: (updatedValues: Partial<Order>, id: Uuid) => void;
   addNewRow: () => void;
   handleCancel: () => void;
-  handleSave: () => void;
+  handleSave: (
+    onConfirm?: (payload: ApiPayload, data: LocalOrder[]) => void
+  ) => void;
   deleteRow: (id: Uuid) => void;
   hideRow: (id: Uuid) => void;
   showAllRows: () => void;
@@ -37,7 +39,7 @@ const ExcelContext = createContext<Context>({
   page: 1,
   setPage: () => {},
   highlightedOrderId: null,
-  handleDragEnd: () => {}
+  handleDragEnd: () => {},
 });
 
 const useExcelContext = () => {

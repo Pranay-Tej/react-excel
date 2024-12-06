@@ -1,6 +1,5 @@
 import "./App.css";
-import Excel from "./excel-components/Excel";
-import ExcelContextProvider from "./excel-components/ExcelContextProvider";
+import BulkEditWithReorderFlow from "./BulkEditWithReorderFlow";
 
 function App() {
   return (
@@ -10,9 +9,7 @@ function App() {
       <br />
       <a href="https://github.com/Pranay-Tej/react-excel">GitHub Link</a>
 
-      <ExcelContextProvider>
-        <Excel />
-      </ExcelContextProvider>
+      <BulkEditWithReorderFlow />
     </>
   );
 }
