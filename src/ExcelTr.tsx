@@ -16,11 +16,13 @@ type Props = {
 export default function ExcelTr(props: Props) {
   const { order } = props;
   const {
+    data,
     updatedOrdersIdsSet,
     handleValueChange,
     hideRow,
     deleteRow,
     highlightedOrderId,
+    moveRows,
   } = useExcelContext();
 
   const rowRef = useRef<HTMLTableRowElement>(null);
@@ -28,7 +30,7 @@ export default function ExcelTr(props: Props) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({
       id: props.order.id,
-      // disabled:
+      disabled: true,
     });
   const dndProps = { ...attributes, ...listeners };
 
@@ -50,7 +52,7 @@ export default function ExcelTr(props: Props) {
       ref={rowRef}
       style={{
         userSelect: "none",
-        cursor: "move",
+        // cursor: "move",
         transform: CSS.Transform.toString(
           transform
             ? {
@@ -67,7 +69,11 @@ export default function ExcelTr(props: Props) {
     >
       {/* <td>{d.position}</td> */}
       <td>
-        <SerialNumField currentPosition={order.position} key={order.position} />
+        <SerialNumField
+          currentPosition={order.position}
+          maxValue={data.length}
+          moveRows={moveRows}
+        />
       </td>
       <td>{order.symbol}</td>
       {/* <td>{order.id}</td> */}

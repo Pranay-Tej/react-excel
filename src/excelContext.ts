@@ -14,7 +14,7 @@ type Context = {
   deleteRow: (id: Uuid) => void;
   hideRow: (id: Uuid) => void;
   showAllRows: () => void;
-  moveRows: (idxOne: number, id2: number) => void;
+  moveRows: (currentPosition: number, newPosition: number) => void;
   page: number;
   setPage: (page: number) => void;
   highlightedOrderId: Uuid | null;
