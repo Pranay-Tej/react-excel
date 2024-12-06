@@ -2,13 +2,10 @@ import { NEW_ORDER_PREFIX } from "../constants";
 import Excel from "../excel-components/Excel";
 import { useExcelContext } from "../excel-components/excelContext";
 import type { ApiPayload, LocalOrder, Order } from "../models";
+import { useBulkEditContext } from "./bulkEditContext";
 
-type Props = {
-  setData: (data: Order[]) => void;
-  setIsEditing: (isEditing: boolean) => void;
-};
-
-export default function EditView(props: Props) {
+export default function EditView() {
+  const { setApiData, setIsEditing } = useBulkEditContext();
   const onConfirm = (payload: ApiPayload, data: LocalOrder[]) => {
     // call api, get new data
     console.log(payload);
@@ -17,8 +14,8 @@ export default function EditView(props: Props) {
       ...d,
       id: d.id.includes(NEW_ORDER_PREFIX) ? crypto.randomUUID() : d.id,
     }));
-    props.setData(newData);
-    props.setIsEditing(false);
+    setApiData(newData);
+    setIsEditing(false);
   };
 
   const { handleSave, isInvalid } = useExcelContext();
@@ -26,7 +23,7 @@ export default function EditView(props: Props) {
   return (
     <div>
       <Excel isSortable />
-      <button className="btn" onClick={() => props.setIsEditing(false)}>
+      <button className="btn" onClick={() => setIsEditing(false)}>
         Cancel
       </button>
       <button

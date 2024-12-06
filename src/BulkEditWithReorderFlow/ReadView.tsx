@@ -1,14 +1,12 @@
-import type { Order } from "../models";
+import { useBulkEditContext } from "./bulkEditContext";
 
-type Props = {
-  data: Order[];
-  setIsEditing: (isEditing: boolean) => void;
-};
-
-export default function ReadView(props: Props) {
+export default function ReadView() {
+  const { setIsEditing, apiData } = useBulkEditContext();
   return (
     <div>
-      <button className="btn" onClick={() => props.setIsEditing(true)}>Edit</button>
+      <button className="btn" onClick={() => setIsEditing(true)}>
+        Edit
+      </button>
 
       <table>
         <thead>
@@ -20,7 +18,7 @@ export default function ReadView(props: Props) {
           </tr>
         </thead>
         <tbody>
-          {props.data.map((d) => (
+          {apiData.map((d) => (
             <tr key={d.id}>
               <td>{d.symbol}</td>
               <td>{d.type}</td>
