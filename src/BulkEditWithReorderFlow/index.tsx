@@ -11,6 +11,7 @@ export default function BulkEditWithReorderFlow() {
       <div>
         <h3>Edit Flow</h3>
         <hr />
+        <br />
         <BulkEditor />
       </div>
     </BulkEditContextProvider>
@@ -18,8 +19,12 @@ export default function BulkEditWithReorderFlow() {
 }
 
 export const BulkEditor = () => {
-  const { isEditing, apiData, hiddenOrderIds, clearFilters } =
-    useBulkEditContext();
+  const {
+    isEditing,
+    apiData,
+    hiddenOrderIds,
+    clearFilters,
+  } = useBulkEditContext();
 
   const hiddenSymbols = useMemo(() => {
     return apiData
