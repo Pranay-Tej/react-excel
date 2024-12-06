@@ -5,7 +5,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { v4 as uuidv4 } from "uuid";
 import { ExcelContext } from "./excelContext";
 import type {
   ApiPayload,
@@ -15,7 +14,7 @@ import type {
   Uuid,
 } from "./models";
 import { NEW_ORDER_PREFIX, initialData } from "./constants";
-import { isInvalidAmount, moveItemsInArray } from "./util";
+import { isInvalidAmount, isInvalidSymbol, moveItemsInArray } from "./util";
 import { faker } from "@faker-js/faker";
 import { DragEndEvent } from "@dnd-kit/core";
 
@@ -62,7 +61,9 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
   }, [highlightedOrderId]);
 
   const isInvalid = useMemo(() => {
-    return data.some((d) => isInvalidAmount(d.amount));
+    return data.some(
+      (d) => isInvalidAmount(d.amount) || isInvalidSymbol(d.symbol)
+    );
   }, [data]);
 
   const handleValueChange = (updatedValues: Partial<Order>, id: Uuid) => {
@@ -75,7 +76,7 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
   };
 
   const addNewRow = () => {
-    const newId = `${NEW_ORDER_PREFIX}${uuidv4()}`;
+    const newId = `${NEW_ORDER_PREFIX}${crypto.randomUUID()}`;
     const newState: LocalOrder[] = [
       {
         id: newId,
@@ -88,7 +89,7 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
         date: new Date(),
         type: "buy",
         position: data.length + 1,
-        symbol: faker.finance.currencyCode(),
+        symbol: "",
       },
       ...data,
     ];
@@ -141,7 +142,7 @@ const ExcelContextProvider = (props: { children: React.ReactNode }) => {
     // call api, get new data
     const newData: Order[] = data.map((d) => ({
       ...d,
-      id: d.id.includes(NEW_ORDER_PREFIX) ? uuidv4() : d.id,
+      id: d.id.includes(NEW_ORDER_PREFIX) ? crypto.randomUUID() : d.id,
     }));
     setApiData(newData);
 

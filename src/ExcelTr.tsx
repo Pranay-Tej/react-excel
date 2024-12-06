@@ -3,7 +3,7 @@ import { useExcelContext } from "./excelContext";
 import { LocalOrder, OrderType } from "./models";
 import { NEW_ORDER_PREFIX } from "./constants";
 import SerialNumField from "./SerilaNumField";
-import { isInvalidAmount } from "./util";
+import { isInvalidAmount, isInvalidSymbol } from "./util";
 import { format } from "date-fns";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -75,7 +75,19 @@ export default function ExcelTr(props: Props) {
           moveRows={moveRows}
         />
       </td>
-      <td>{order.symbol}</td>
+      <td>
+        <input
+          type="text"
+          value={order.symbol}
+          onChange={(e) =>
+            handleValueChange({ symbol: e.target.value }, order.id)
+          }
+          className={clsx({
+            error: isInvalidSymbol(order.symbol),
+          })}
+        />
+      </td>
+
       {/* <td>{order.id}</td> */}
       <td>
         <select
