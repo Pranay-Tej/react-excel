@@ -19,6 +19,7 @@ type Context = {
   setPage: (page: number) => void;
   highlightedOrderId: Uuid | null;
   handleDragEnd: (e: DragEndEvent) => void;
+  totalPages: number;
 };
 
 const ExcelContext = createContext<Context>({
@@ -36,6 +37,7 @@ const ExcelContext = createContext<Context>({
   setPage: () => {},
   highlightedOrderId: null,
   handleDragEnd: () => {},
+  totalPages: 1,
 });
 
 const useExcelContext = () => {

@@ -1,9 +1,7 @@
 import { useExcelContext } from "./excelContext";
 
 export default function PageNumber() {
-  const { page, setPage, formattedData } = useExcelContext();
-
-  const totalPages = Math.ceil(formattedData.length / 10);
+  const { page, setPage, totalPages } = useExcelContext();
 
   return (
     <div

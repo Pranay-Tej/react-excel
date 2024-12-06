@@ -19,6 +19,7 @@ export default function ReadView() {
       <table>
         <thead>
           <tr>
+            <th>Sl no.</th>
             <th>Symbol</th>
             <th>Type</th>
             <th>Price</th>
@@ -27,8 +28,9 @@ export default function ReadView() {
           </tr>
         </thead>
         <tbody>
-          {apiData.map((d) => (
+          {apiData.map((d, idx) => (
             <tr key={d.id}>
+              <td>{idx + 1}</td>
               <td>{d.symbol}</td>
               <td>{d.type}</td>
               <td>{d.amount}</td>

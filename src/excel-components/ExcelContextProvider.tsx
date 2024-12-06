@@ -50,6 +50,10 @@ const ExcelContextProvider = (props: {
       .slice((page - 1) * 10, page * 10);
   }, [data, hiddenOrdersIdSet, page]);
 
+  const totalPages = Math.ceil(
+    data.filter(({ id }) => !hiddenOrdersIdSet.has(id)).length / 10
+  );
+
   useEffect(() => {
     setData(initialData.map((d, idx) => ({ ...d, position: idx + 1 })));
   }, [initialData]);
@@ -264,6 +268,7 @@ const ExcelContextProvider = (props: {
         setPage,
         highlightedOrderId,
         handleDragEnd,
+        totalPages,
       }}
     >
       {props.children}

@@ -10,6 +10,7 @@ export default function EditView() {
     onConfirm,
     isSimulatingError,
     setIsSimulatingError,
+    setError,
   } = useBulkEditContext();
 
   const { handleSave, isInvalid } = useExcelContext();
@@ -32,7 +33,13 @@ export default function EditView() {
         </p>
       )}
 
-      <button className="btn" onClick={() => setIsEditing(false)}>
+      <button
+        className="btn"
+        onClick={() => {
+          setError(null);
+          setIsEditing(false);
+        }}
+      >
         Cancel
       </button>
       <button
