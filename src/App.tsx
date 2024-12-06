@@ -1,4 +1,5 @@
 import "./App.css";
+import BulkAddFlow from "./BulkAddFlow";
 import BulkEditWithReorderFlow from "./BulkEditWithReorderFlow";
 
 function App() {
@@ -12,6 +13,12 @@ function App() {
       <br />
 
       <BulkEditWithReorderFlow />
+
+      <hr />
+      <br />
+      <br />
+
+      <BulkAddFlow />
     </>
   );
 }

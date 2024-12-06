@@ -20,10 +20,10 @@ import { DragEndEvent } from "@dnd-kit/core";
 
 const ExcelContextProvider = (props: {
   initialData: Order[];
-  hiddenOrderIds: Uuid[];
+  hiddenOrderIds?: Uuid[];
   children: React.ReactNode;
 }) => {
-  const { initialData, hiddenOrderIds } = props;
+  const { initialData, hiddenOrderIds = [] } = props;
   // const [apiData, setApiData] = useState<Order[]>(initialData);
   const [data, setData] = useState<LocalOrder[]>([]);
   const [page, setPage] = useState(1);
