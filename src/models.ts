@@ -17,9 +17,11 @@ export type LocalOrder = Order & {
 
 export type ApiPayloadOrder = Order;
 
-export type ApiPayload = {
+export type BulkEditApiPayload = {
   new_orders: ApiPayloadOrder[];
   modified_orders: ApiPayloadOrder[];
   deleted_orders: Uuid[];
   updated_arrangement?: Uuid[];
 };
+
+export type ApiPayloadNewOrder = Omit<Order, "id">;

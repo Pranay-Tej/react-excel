@@ -1,5 +1,11 @@
 import { createContext, useContext } from "react";
-import type { ApiPayload, LocalOrder, Order, Uuid } from "../models";
+import type {
+  ApiPayloadNewOrder,
+  BulkEditApiPayload,
+  LocalOrder,
+  Order,
+  Uuid,
+} from "../models";
 import { DragEndEvent } from "@dnd-kit/core";
 
 type Context = {
@@ -10,8 +16,8 @@ type Context = {
   handleValueChange: (updatedValues: Partial<Order>, id: Uuid) => void;
   addNewRow: () => void;
   handleCancel: () => void;
-  handleSave: (
-    onConfirm?: (payload: ApiPayload, data: LocalOrder[]) => void
+  handleBulkEditSave: (
+    onConfirm?: (payload: BulkEditApiPayload, data: LocalOrder[]) => void
   ) => void;
   deleteRow: (id: Uuid) => void;
   moveRows: (currentPosition: number, newPosition: number) => void;
@@ -20,6 +26,9 @@ type Context = {
   highlightedOrderId: Uuid | null;
   handleDragEnd: (e: DragEndEvent) => void;
   totalPages: number;
+  handleBulkAddSave: (
+    onConfirm?: (payload: ApiPayloadNewOrder[]) => void
+  ) => void;
 };
 
 const ExcelContext = createContext<Context>({
@@ -30,7 +39,7 @@ const ExcelContext = createContext<Context>({
   handleValueChange: () => {},
   addNewRow: () => {},
   handleCancel: () => {},
-  handleSave: () => {},
+  handleBulkEditSave: () => {},
   deleteRow: () => {},
   moveRows: () => {},
   page: 1,
@@ -38,6 +47,7 @@ const ExcelContext = createContext<Context>({
   highlightedOrderId: null,
   handleDragEnd: () => {},
   totalPages: 1,
+  handleBulkAddSave: () => {},
 });
 
 const useExcelContext = () => {

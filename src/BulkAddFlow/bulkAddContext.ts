@@ -1,12 +1,12 @@
 import { createContext, useContext } from "react";
-import type { ApiPayload, LocalOrder, Order } from "../models";
+import type { ApiPayloadNewOrder, Order } from "../models";
 
 type Context = {
   orderData: Order[];
   isEditing: boolean;
   setIsEditing: (isEditing: boolean) => void;
   setApiData: (data: Order[]) => void;
-  onConfirm: (payload: ApiPayload, data: LocalOrder[]) => void;
+  onConfirm: (payload: ApiPayloadNewOrder[]) => void;
   isSimulatingError: boolean;
   setIsSimulatingError: (isSimulatingError: boolean) => void;
   error: string | null;

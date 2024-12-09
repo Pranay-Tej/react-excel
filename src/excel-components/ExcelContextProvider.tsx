@@ -7,11 +7,12 @@ import React, {
 } from "react";
 import { ExcelContext } from "./excelContext";
 import type {
-  ApiPayload,
+  BulkEditApiPayload,
   ApiPayloadOrder,
   LocalOrder,
   Order,
   Uuid,
+  ApiPayloadNewOrder,
 } from "../models";
 import { NEW_ORDER_PREFIX } from "../constants";
 import { isInvalidAmount, isInvalidSymbol, moveItemsInArray } from "../util";
@@ -112,8 +113,8 @@ const ExcelContextProvider = (props: {
     isReOrdered.current = false;
   };
 
-  const handleSave = (
-    onConfirm?: (payload: ApiPayload, data: LocalOrder[]) => void
+  const handleBulkEditSave = (
+    onConfirm?: (payload: BulkEditApiPayload, data: LocalOrder[]) => void
   ) => {
     if (isInvalid) {
       return;
@@ -134,7 +135,7 @@ const ExcelContextProvider = (props: {
         };
       });
 
-    const payload: ApiPayload = {
+    const payload: BulkEditApiPayload = {
       new_orders: newOrders,
       modified_orders: updatedOrders,
       deleted_orders: Array.from(deletedOrdersIdSet.current),
@@ -163,6 +164,29 @@ const ExcelContextProvider = (props: {
     // setUpdatedOrdersIds([]);
     // deletedOrdersIdSet.current.clear();
     // isReOrdered.current = false;
+  };
+
+  const handleBulkAddSave = (
+    onConfirm?: (payload: ApiPayloadNewOrder[]) => void
+  ) => {
+    if (isInvalid) {
+      return;
+    }
+
+    const newOrders: ApiPayloadNewOrder[] = data
+      .filter((d) => d.id.includes(NEW_ORDER_PREFIX))
+      .map((d) => {
+        const { amount, date, notes, type, symbol } = d;
+        return {
+          amount,
+          date,
+          notes,
+          type,
+          symbol,
+        };
+      });
+
+    onConfirm?.(newOrders);
   };
 
   const deleteRow = (id: Uuid) => {
@@ -261,7 +285,7 @@ const ExcelContextProvider = (props: {
         handleValueChange,
         addNewRow,
         handleCancel,
-        handleSave,
+        handleBulkEditSave,
         deleteRow,
         moveRows,
         page,
@@ -269,6 +293,7 @@ const ExcelContextProvider = (props: {
         highlightedOrderId,
         handleDragEnd,
         totalPages,
+        handleBulkAddSave,
       }}
     >
       {props.children}

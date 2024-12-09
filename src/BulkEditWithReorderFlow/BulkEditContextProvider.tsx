@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { NEW_ORDER_PREFIX, initialData } from "../constants";
 import { BulkEditContext } from "./bulkEditContext";
-import type { ApiPayload, LocalOrder, Order, Uuid } from "../models";
+import type { BulkEditApiPayload, LocalOrder, Order, Uuid } from "../models";
 
 const BulkEditContextProvider = (props: { children: React.ReactNode }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -28,7 +28,7 @@ const BulkEditContextProvider = (props: { children: React.ReactNode }) => {
     };
   }, []);
 
-  const onConfirm = (payload: ApiPayload, data: LocalOrder[]) => {
+  const onConfirm = (payload: BulkEditApiPayload, data: LocalOrder[]) => {
     console.log(payload);
     setError(null);
     setIsLoading(true);

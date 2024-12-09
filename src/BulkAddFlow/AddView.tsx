@@ -13,7 +13,7 @@ export default function AddView() {
     setError,
   } = useBulkAddContext();
 
-  const { handleSave, isInvalid } = useExcelContext();
+  const { handleBulkAddSave, isInvalid } = useExcelContext();
 
   return (
     <div
@@ -44,7 +44,7 @@ export default function AddView() {
       </button>
       <button
         className="btn"
-        onClick={() => handleSave(onConfirm)}
+        onClick={() => handleBulkAddSave(onConfirm)}
         disabled={isInvalid || isLoading}
       >
         Save

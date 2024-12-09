@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import type { ApiPayload, LocalOrder, Order, Uuid } from "../models";
+import type { BulkEditApiPayload, LocalOrder, Order, Uuid } from "../models";
 
 type Context = {
   apiData: Order[];
@@ -9,7 +9,7 @@ type Context = {
   hiddenOrderIds: Uuid[];
   hideRow: (id: Uuid) => void;
   clearFilters: () => void;
-  onConfirm: (payload: ApiPayload, data: LocalOrder[]) => void;
+  onConfirm: (payload: BulkEditApiPayload, data: LocalOrder[]) => void;
   isSimulatingError: boolean;
   setIsSimulatingError: (isSimulatingError: boolean) => void;
   error: string | null;

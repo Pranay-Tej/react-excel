@@ -13,7 +13,7 @@ export default function EditView() {
     setError,
   } = useBulkEditContext();
 
-  const { handleSave, isInvalid, addNewRow } = useExcelContext();
+  const { handleBulkEditSave, isInvalid, addNewRow } = useExcelContext();
 
   return (
     <div
@@ -48,7 +48,7 @@ export default function EditView() {
       </button>
       <button
         className="btn"
-        onClick={() => handleSave(onConfirm)}
+        onClick={() => handleBulkEditSave(onConfirm)}
         disabled={isInvalid || isLoading}
       >
         Save

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { NEW_ORDER_PREFIX } from "../constants";
 import { BulkAddContext } from "./bulkAddContext";
-import type { ApiPayload, LocalOrder, Order } from "../models";
+import type { ApiPayloadNewOrder, Order } from "../models";
 import { faker } from "@faker-js/faker";
 
 const BulkAddContextProvider = (props: { children: React.ReactNode }) => {
@@ -42,16 +42,16 @@ const BulkAddContextProvider = (props: { children: React.ReactNode }) => {
     };
   }, []);
 
-  const onConfirm = (payload: ApiPayload, data: LocalOrder[]) => {
+  const onConfirm = (payload: ApiPayloadNewOrder[]) => {
     console.log(payload);
     setError(null);
     setIsLoading(true);
     timerRef.current = setTimeout(() => {
       // call api, get new data
 
-      const newData: Order[] = data.map((d) => ({
+      const newData: Order[] = payload.map((d) => ({
         ...d,
-        id: d.id.includes(NEW_ORDER_PREFIX) ? crypto.randomUUID() : d.id,
+        id: crypto.randomUUID(),
       }));
       if (isSimulatingError) {
         setIsLoading(false);
